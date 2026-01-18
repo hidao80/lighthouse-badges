@@ -43,12 +43,12 @@ lighthouse-badges https://example.com
 Output:
 
 ```
-![Accessibility](https://img.shields.io/badge/Accessibility-100-brightgreen?style=flat-square)&emsp;![Best_Practices](https://img.shields.io/badge/Best_Practices-93-brightgreen?style=flat-square)&emsp;![Performance](https://img.shields.io/badge/Performance-100-brightgreen?style=flat-square)&emsp;![SEO](https://img.shields.io/badge/SEO-80-yellow?style=flat-square)
+![Accessibility](https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square)&emsp;![Best_Practices](https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square)&emsp;![Performance](https://img.shields.io/badge/Performance-93-brightgreen?style=flat-square)&emsp;![SEO](https://img.shields.io/badge/SEO-90-brightgreen?style=flat-square)
 ```
 
 Rendered:
 
-![Accessibility](https://img.shields.io/badge/Accessibility-100-brightgreen?style=flat-square)&emsp;![Best_Practices](https://img.shields.io/badge/Best_Practices-93-brightgreen?style=flat-square)&emsp;![Performance](https://img.shields.io/badge/Performance-100-brightgreen?style=flat-square)&emsp;![SEO](https://img.shields.io/badge/SEO-80-yellow?style=flat-square)
+![Accessibility](https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square)&emsp;![Best_Practices](https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square)&emsp;![Performance](https://img.shields.io/badge/Performance-93-brightgreen?style=flat-square)&emsp;![SEO](https://img.shields.io/badge/SEO-72-brightgreen?style=flat-square)
 
 ### JSON Output
 
@@ -63,7 +63,7 @@ Output:
   "performance": 100,
   "accessibility": 100,
   "bestPractices": 93,
-  "seo": 80
+  "seo": 72
 }
 ```
 
@@ -74,6 +74,103 @@ lighthouse-badges https://example.com -s
 ```
 
 Outputs an SVG string with donut charts for each score.
+
+Output:
+
+<details>
+<summary>Details</summary>
+
+```svg copy
+<svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+
+    <g transform="translate(0, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="6.031857894892408"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        94
+      </text>
+    </g>
+
+
+    <g transform="translate(120, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="0"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        100
+      </text>
+    </g>
+
+
+    <g transform="translate(240, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="10.053096491487336"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        90
+      </text>
+    </g>
+
+
+    <g transform="translate(360, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="10.053096491487336"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        72
+      </text>
+    </g>
+
+</svg>
+```
+
+</details>
+
+Rendered:
+
+<svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="6.031857894892408"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        94
+      </text>
+    </g>
+    <g transform="translate(120, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="0"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        100
+      </text>
+    </g>
+    <g transform="translate(240, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="10.053096491487336"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">
+        90
+      </text>
+    </g>
+    <g transform="translate(360, 0)">
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+      <circle cx="60" cy="60" r="16" fill="none" stroke="#ffa400" stroke-width="8"
+        stroke-dasharray="100.53096491487338" stroke-dashoffset="10.053096491487336"
+        stroke-linecap="round" transform="rotate(-90 60 60)" />
+      <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#ffa400">
+        72
+      </text>
+    </g>
+</svg>
 
 ## Badge Colors
 
