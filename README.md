@@ -1,8 +1,8 @@
 # lighthouse-badges
 
-![Lint](https://github.com/{owner}/{repo}/actions/workflows/lint.yml/badge.svg)
-![Audit](https://github.com/{owner}/{repo}/actions/workflows/audit.yml/badge.svg)
-![Build](https://github.com/{owner}/{repo}/actions/workflows/build.yml/badge.svg)
+![Lint](https://github.com/hidao80/lighthouse-badges/actions/workflows/lint.yml/badge.svg)
+![Audit](https://github.com/hidao80/lighthouse-badges/actions/workflows/audit.yml/badge.svg)
+![Build](https://github.com/hidao80/lighthouse-badges/actions/workflows/build.yml/badge.svg)
 
 A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome and the Lighthouse npm package.
 
