@@ -6,10 +6,6 @@
 
 A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome and the Lighthouse npm package.
 
-```copilot prompt copy
-How do I use it?
-```
-
 ## Installation
 
 ```bash copy
