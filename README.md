@@ -96,7 +96,7 @@ docker run lighthouse-badges https://example.com
 ### Run directly
 
 ```bash copy
-pnpm dlx github:hidao80/lighthouse-badges https://example.com
+npx github:hidao80/lighthouse-badges https://example.com
 ```
 
 ## License
