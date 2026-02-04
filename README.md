@@ -1,6 +1,6 @@
 # lighthouse-badges
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 ![Lint](https://github.com/hidao80/lighthouse-badges/actions/workflows/lint.yml/badge.svg)
 ![Audit](https://github.com/hidao80/lighthouse-badges/actions/workflows/audit.yml/badge.svg)
 ![Build](https://github.com/hidao80/lighthouse-badges/actions/workflows/build.yml/badge.svg)
