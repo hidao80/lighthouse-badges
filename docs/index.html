@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lighthouse-badges — Lighthouse Score Badges from the CLI</title>
+<meta name="description" content="A CLI tool that generates Lighthouse score badges, JSON, or SVG donut charts using local Chrome and the Lighthouse npm package.">
+<link rel="canonical" href="https://hidao80.github.io/lighthouse-badges/">
+
+<!-- Favicon (emoji) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%A6%3C/text%3E%3C/svg%3E">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="lighthouse-badges — Lighthouse Score Badges from the CLI">
+<meta property="og:description" content="Generate Lighthouse score badges, JSON, or SVG donut charts using local Chrome and the Lighthouse npm package.">
+<meta property="og:url" content="https://hidao80.github.io/lighthouse-badges/">
+<meta property="og:site_name" content="lighthouse-badges">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hidao80.github.io/lighthouse-badges/og-image.svg">
+
+<!-- X.com (Twitter) Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="lighthouse-badges — Lighthouse Score Badges from the CLI">
+<meta name="twitter:description" content="Generate Lighthouse score badges, JSON, or SVG donut charts using local Chrome and the Lighthouse npm package.">
+<meta name="twitter:image" content="https://hidao80.github.io/lighthouse-badges/og-image.svg">
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "lighthouse-badges",
+  "description": "A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome and the Lighthouse npm package.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Windows, macOS, Linux",
+  "softwareVersion": "1.0.0",
+  "url": "https://hidao80.github.io/lighthouse-badges/",
+  "downloadUrl": "https://www.npmjs.com/package/lighthouse-badges",
+  "license": "https://opensource.org/licenses/MIT",
+  "author": {
+    "@type": "Person",
+    "name": "hidao80",
+    "url": "https://github.com/hidao80"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<!-- Pico CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+<style>
+  :root { --pico-font-size: 100%; }
+  .hero { text-align: center; padding: 3rem 0 2rem; }
+  .hero .emoji { font-size: 4rem; line-height: 1; }
+  .badges-row img { margin: 0.15rem; }
+  pre { position: relative; }
+  code.lang-badge { font-size: 0.75em; opacity: 0.7; }
+  table.colors td:first-child, table.colors th:first-child { width: 40%; }
+  .score-green { color: #0cce6b; font-weight: bold; }
+  .score-yellow { color: #ffa400; font-weight: bold; }
+  .score-red { color: #ff4e42; font-weight: bold; }
+  footer.container { text-align: center; padding: 2rem 0; opacity: 0.75; }
+  .theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 10; }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle secondary outline" id="theme-toggle" aria-label="Toggle light/dark theme">🌓</button>
+
+<main class="container">
+
+  <section class="hero">
+    <div class="emoji">🔦</div>
+    <h1>lighthouse-badges</h1>
+    <p>Generate Lighthouse score badges, JSON, or SVG donut charts — straight from your terminal, using local Chrome.</p>
+    <div class="badges-row">
+      <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+      <img src="https://github.com/hidao80/lighthouse-badges/actions/workflows/lint.yml/badge.svg" alt="Lint status">
+      <img src="https://github.com/hidao80/lighthouse-badges/actions/workflows/audit.yml/badge.svg" alt="Audit status">
+      <img src="https://github.com/hidao80/lighthouse-badges/actions/workflows/build.yml/badge.svg" alt="Build status">
+    </div>
+    <div class="grid" style="max-width: 420px; margin: 1.5rem auto 0;">
+      <a href="#quick-start" role="button">Get Started</a>
+      <a href="https://github.com/hidao80/lighthouse-badges" role="button" class="secondary">View on GitHub</a>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Installation</h2>
+    <pre><code>npm install -g lighthouse-badges</code></pre>
+    <h3>Requirements</h3>
+    <ul>
+      <li>Node.js &gt;= 18.0.0</li>
+      <li>Google Chrome installed on your system</li>
+    </ul>
+  </section>
+
+  <section id="usage">
+    <h2>Usage</h2>
+    <pre><code>lighthouse-badges &lt;URL&gt; [options]</code></pre>
+    <table>
+      <thead><tr><th>Option</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><em>(none)</em></td><td>Output Markdown badges</td></tr>
+        <tr><td><code>-b</code>, <code>--badge</code></td><td>Output Markdown badges</td></tr>
+        <tr><td><code>-j</code>, <code>--json</code></td><td>Output JSON</td></tr>
+        <tr><td><code>-s</code>, <code>--svg</code></td><td>Output SVG with donut charts</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="examples">
+    <h2>Examples</h2>
+
+    <h3>Markdown badges (default)</h3>
+    <pre><code>lighthouse-badges https://example.com</code></pre>
+    <p>
+      <img src="https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square" alt="Accessibility">
+      <img src="https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square" alt="Best Practices">
+      <img src="https://img.shields.io/badge/Performance-93-brightgreen?style=flat-square" alt="Performance">
+      <img src="https://img.shields.io/badge/SEO-90-brightgreen?style=flat-square" alt="SEO">
+    </p>
+
+    <h3>JSON output</h3>
+    <pre><code>lighthouse-badges https://example.com -j</code></pre>
+    <pre><code>{
+  "performance": 100,
+  "accessibility": 100,
+  "bestPractices": 93,
+  "seo": 72
+}</code></pre>
+
+    <h3>SVG output</h3>
+    <pre><code>lighthouse-badges https://example.com -s</code></pre>
+    <svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lighthouse score donut charts: 94, 100, 90, 72">
+      <g transform="translate(0, 0)">
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+          stroke-dasharray="100.53096491487338" stroke-dashoffset="6.031857894892408"
+          stroke-linecap="round" transform="rotate(-90 60 60)" />
+        <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">94</text>
+      </g>
+      <g transform="translate(120, 0)">
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+          stroke-dasharray="100.53096491487338" stroke-dashoffset="0"
+          stroke-linecap="round" transform="rotate(-90 60 60)" />
+        <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">100</text>
+      </g>
+      <g transform="translate(240, 0)">
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#0cce6b" stroke-width="8"
+          stroke-dasharray="100.53096491487338" stroke-dashoffset="10.053096491487336"
+          stroke-linecap="round" transform="rotate(-90 60 60)" />
+        <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#0cce6b">90</text>
+      </g>
+      <g transform="translate(360, 0)">
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
+        <circle cx="60" cy="60" r="16" fill="none" stroke="#ffa400" stroke-width="8"
+          stroke-dasharray="100.53096491487338" stroke-dashoffset="10.053096491487336"
+          stroke-linecap="round" transform="rotate(-90 60 60)" />
+        <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="#ffa400">72</text>
+      </g>
+    </svg>
+  </section>
+
+  <section id="colors">
+    <h2>Badge Colors</h2>
+    <table class="colors">
+      <thead><tr><th>Score</th><th>Color</th></tr></thead>
+      <tbody>
+        <tr><td>90–100</td><td class="score-green">Green</td></tr>
+        <tr><td>50–89</td><td class="score-yellow">Yellow</td></tr>
+        <tr><td>0–49</td><td class="score-red">Red</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="quick-start">
+    <h2>Quick Start</h2>
+
+    <h3>Run with Docker</h3>
+    <pre><code># Production build
+docker build -t lighthouse-badges .
+docker run lighthouse-badges https://example.com</code></pre>
+
+    <h3>Run directly</h3>
+    <pre><code>npx github:hidao80/lighthouse-badges https://example.com</code></pre>
+  </section>
+
+</main>
+
+<footer class="container">
+  <p>
+    <a href="https://github.com/hidao80/lighthouse-badges">GitHub</a> ·
+    <a href="https://github.com/hidao80/lighthouse-badges/blob/main/LICENSE">MIT License</a> ·
+    <a href="https://deepwiki.com/hidao80/lighthouse-badges">Ask DeepWiki</a>
+  </p>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    root.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
+
+    toggle.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  })();
+</script>
+
+</body>
+</html>
