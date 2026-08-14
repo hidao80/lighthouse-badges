@@ -205,14 +205,14 @@ docker run lighthouse-badges https://example.com</code></pre>
 </footer>
 
 <script>
-  (function () {
+  (() => {
     var root = document.documentElement;
     var toggle = document.getElementById('theme-toggle');
     var stored = localStorage.getItem('theme');
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     root.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
 
-    toggle.addEventListener('click', function () {
+    toggle.addEventListener('click', () => {
       var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
