@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/setup@v1
-        with:
-          version: 11
-          runtime: node@22
-          cache: true
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
