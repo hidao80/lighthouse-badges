@@ -4,15 +4,15 @@
   "description": "Generate Lighthouse score badges, JSON, or SVG using local Lighthouse",
   "type": "module",
   "bin": {
-    "lighthouse-badges": "./dist/bin/lighthouse-badges.js"
+    "lighthouse-badges": "./dist/lighthouse-badges.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "lint": "eslint src/",
+    "lint": "biome check src/",
     "test": "vitest",
-    "start": "node ./dist/bin/lighthouse-badges.js",
-    "prepublishOnly": "pnpm build"
+    "start": "node ./dist/lighthouse-badges.js",
+    "prepublishOnly": "bun run build"
   },
   "keywords": [
     "lighthouse",
@@ -34,11 +34,11 @@
     "lighthouse": "^12.8.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
+    "@biomejs/biome": "^2.5.8",
     "@types/node": "^20.19.43",
-    "eslint": "^9.39.5",
-    "globals": "^17.9.0",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.66.0"
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "@opentelemetry/core": ">=2.8.0"
   }
 }

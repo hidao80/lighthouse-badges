@@ -1,2 +1,0 @@
-overrides:
-  "@opentelemetry/core": ">=2.8.0"
