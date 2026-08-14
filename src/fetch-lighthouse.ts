@@ -1,13 +1,20 @@
-import lighthouse from 'lighthouse';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { resolve } from 'node:path';
 import * as chromeLauncher from 'chrome-launcher';
-import { mkdtempSync, rmSync } from 'fs';
-import { resolve } from 'path';
+import lighthouse from 'lighthouse';
 import type { LighthouseScores } from './types.js';
 
 // Set TEMP to current directory for lighthouse temp files
 const cwd = resolve('.');
 
-export async function fetchLighthouseScores(url: string): Promise<LighthouseScores> {
+/**
+ * Launch headless Chrome and run Lighthouse against the given URL.
+ * @param url - The URL to audit.
+ * @returns Rounded 0-100 scores for performance, accessibility, best practices, and SEO.
+ */
+export async function fetchLighthouseScores(
+  url: string,
+): Promise<LighthouseScores> {
   const userDataDir = mkdtempSync(resolve(cwd, '.lighthouse-'));
 
   const chrome = await chromeLauncher.launch({
@@ -17,7 +24,7 @@ export async function fetchLighthouseScores(url: string): Promise<LighthouseScor
       '--no-sandbox',
       `--user-data-dir=${userDataDir}`,
     ],
-    userDataDir: userDataDir
+    userDataDir: userDataDir,
   });
 
   try {
@@ -27,9 +34,14 @@ export async function fetchLighthouseScores(url: string): Promise<LighthouseScor
         port: chrome.port,
         output: 'json',
         logLevel: 'silent',
-        onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+        onlyCategories: [
+          'performance',
+          'accessibility',
+          'best-practices',
+          'seo',
+        ],
       },
-      undefined
+      undefined,
     );
 
     if (!result) {
@@ -41,14 +53,16 @@ export async function fetchLighthouseScores(url: string): Promise<LighthouseScor
     return {
       performance: Math.round((categories.performance?.score ?? 0) * 100),
       accessibility: Math.round((categories.accessibility?.score ?? 0) * 100),
-      bestPractices: Math.round((categories['best-practices']?.score ?? 0) * 100),
+      bestPractices: Math.round(
+        (categories['best-practices']?.score ?? 0) * 100,
+      ),
       seo: Math.round((categories.seo?.score ?? 0) * 100),
     };
   } finally {
     await chrome.kill();
 
     // Wait for the chrome object to release the temporary folder
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Delete the temporary folder again. We waited for chrome to release the lock.
     rmSync(userDataDir, { recursive: true, force: true });
