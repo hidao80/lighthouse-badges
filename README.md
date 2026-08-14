@@ -14,6 +14,12 @@ A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome 
 npm install -g lighthouse-badges
 ```
 
+Or with Bun:
+
+```bash copy
+bun add -g lighthouse-badges
+```
+
 ## Requirements
 
 - Node.js >= 18.0.0
@@ -45,7 +51,7 @@ lighthouse-badges https://example.com
 Output:
 
 ```
-![Accessibility](https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square)&emsp;![Best_Practices](https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square)&emsp;![Performance](https://img.shields.io/badge/Performance-93-brightgreen?style=flat-square)&emsp;![SEO](https://img.shields.io/badge/SEO-90-brightgreen?style=flat-square)
+![Accessibility](https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square)&emsp;![Best_Practices](https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square)&emsp;![Performance](https://img.shields.io/badge/Performance-93-brightgreen?style=flat-square)&emsp;![SEO](https://img.shields.io/badge/SEO-72-yellow?style=flat-square)
 ```
 
 Rendered:
@@ -195,8 +201,28 @@ docker run lighthouse-badges https://example.com
 ### Run directly
 
 ```bash copy
+bunx github:hidao80/lighthouse-badges https://example.com
+```
+
+Or with npm:
+
+```bash copy
 npx github:hidao80/lighthouse-badges https://example.com
 ```
+
+## Development
+
+```bash copy
+bun install
+bun run build   # tsc -> dist/
+bun run dev     # tsc --watch
+bun run lint    # biome check src/
+```
+
+`dist/` is committed to the repo so `npx`/`bunx github:...` works without a
+build step, so run `bun run build` and commit the `dist/` diff whenever
+`src/` changes. See [AGENTS.md](AGENTS.md) for the full contributor guide and
+[docs/ADR.md](docs/ADR.md) for the reasoning behind these choices.
 
 ## License
 
