@@ -1,1 +1,1 @@
-{"version":3,"file":"fetch-lighthouse.d.ts","sourceRoot":"","sources":["../src/fetch-lighthouse.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,YAAY,CAAC;AAKnD,wBAAsB,qBAAqB,CAAC,GAAG,EAAE,MAAM,GAAG,OAAO,CAAC,gBAAgB,CAAC,CA8ClF"}
+{"version":3,"file":"fetch-lighthouse.d.ts","sourceRoot":"","sources":["../src/fetch-lighthouse.ts"],"names":[],"mappings":"AAIA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,YAAY,CAAC;AAKnD;;;;GAIG;AACH,wBAAsB,qBAAqB,CACzC,GAAG,EAAE,MAAM,GACV,OAAO,CAAC,gBAAgB,CAAC,CAqD3B"}

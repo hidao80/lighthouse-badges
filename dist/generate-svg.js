@@ -1,3 +1,8 @@
+/**
+ * Map a 0-100 score to a donut-chart stroke color.
+ * @param score - Lighthouse score (0-100).
+ * @returns Hex color: green (>=90), amber (>=50), or red.
+ */
 function getSvgColor(score) {
     if (score >= 90)
         return '#0cce6b';
@@ -5,6 +10,13 @@ function getSvgColor(score) {
         return '#ffa400';
     return '#ff4e42';
 }
+/**
+ * Build a single donut-chart SVG fragment for one score.
+ * @param score - Lighthouse score (0-100).
+ * @param color - Stroke color for the filled arc and label text.
+ * @param x - Horizontal translate offset for this donut within the parent SVG.
+ * @returns SVG `<g>` markup for the donut and its centered score label.
+ */
 function createDonut(score, color, x) {
     const radius = 16;
     const circumference = 2 * Math.PI * radius;
@@ -21,6 +33,12 @@ function createDonut(score, color, x) {
     </g>
   `;
 }
+/**
+ * Render Lighthouse scores as an SVG containing one donut chart per category.
+ * @param scores - Lighthouse scores to render.
+ * @returns Standalone SVG markup, 480x120, with donuts for accessibility,
+ * best practices, performance, and SEO in that order.
+ */
 export function generateSvg(scores) {
     return `
 <svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
