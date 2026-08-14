@@ -1,11 +1,10 @@
 # Build stage
-FROM node:22-alpine AS builder
-RUN corepack enable && corepack prepare pnpm@latest --activate
+FROM oven/bun:1-alpine AS builder
 WORKDIR /app
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
-RUN pnpm install --frozen-lockfile
+COPY bun.lock package.json ./
+RUN bun install --frozen-lockfile
 COPY . .
-RUN pnpm run build
+RUN bun run build
 
 # Production stage - needs Chrome for Lighthouse
 FROM node:22-bookworm-slim AS runner
@@ -26,4 +25,4 @@ COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nodejs:nodejs /app/package.json ./
 USER nodejs
-ENTRYPOINT ["node", "dist/bin/lighthouse-badges.js"]
+ENTRYPOINT ["node", "dist/lighthouse-badges.js"]

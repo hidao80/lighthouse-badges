@@ -8,4 +8,4 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    command: pnpm run dev
+    command: bun run dev
