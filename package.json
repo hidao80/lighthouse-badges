@@ -9,7 +9,7 @@
   "scripts": {
     "prepare": "bun run build",
     "prepack": "bun run build",
-    "build": "tsc -b",
+    "build": "tsc",
     "dev": "tsc --watch",
     "lint": "biome check src/",
     "test": "vitest",
