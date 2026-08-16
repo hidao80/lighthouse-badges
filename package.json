@@ -12,7 +12,11 @@
     "lint": "biome check src/",
     "test": "vitest",
     "start": "node ./dist/lighthouse-badges.js",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "act": "act -l",
+    "act:audit": "act -j audit",
+    "act:build": "act -j build",
+    "act:lint": "act -j lint"
   },
   "keywords": [
     "lighthouse",
