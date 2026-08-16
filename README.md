@@ -219,9 +219,9 @@ bun run dev     # tsc --watch
 bun run lint    # biome check src/
 ```
 
-`dist/` is committed to the repo so `npx`/`bunx github:...` works without a
-build step, so run `bun run build` and commit the `dist/` diff whenever
-`src/` changes. See [AGENTS.md](AGENTS.md) for the full contributor guide and
+The `prepare` script (`tsc`) builds `dist/` automatically when installed via
+`npx`/`bunx github:...`, so `dist/` does not need to be committed. See
+[AGENTS.md](AGENTS.md) for the full contributor guide and
 [docs/ADR.md](docs/ADR.md) for the reasoning behind these choices.
 
 ## License

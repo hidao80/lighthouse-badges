@@ -7,7 +7,9 @@
     "lighthouse-badges": "./dist/lighthouse-badges.js"
   },
   "scripts": {
-    "build": "tsc",
+    "prepare": "bun run build",
+    "prepack": "bun run build",
+    "build": "tsc -b",
     "dev": "tsc --watch",
     "lint": "biome check src/",
     "test": "vitest",
