@@ -11,13 +11,13 @@ A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome 
 ## Installation
 
 ```bash copy
-npm install -g lighthouse-badges
+bun add -g lighthouse-badges
 ```
 
-Or with Bun:
+Or with npm:
 
 ```bash copy
-bun add -g lighthouse-badges
+npm install -g lighthouse-badges
 ```
 
 ## Requirements
@@ -28,7 +28,7 @@ bun add -g lighthouse-badges
 ## Usage
 
 ```bash copy
-lighthouse-badges <URL> [options]
+npx github:hidao80/lighthouse-badges <URL> [options]
 ```
 
 ### Options
@@ -45,7 +45,7 @@ lighthouse-badges <URL> [options]
 ### Markdown Badges (default)
 
 ```bash copy
-lighthouse-badges https://example.com
+npx github:hidao80/lighthouse-badges https://example.com
 ```
 
 Output:
@@ -61,7 +61,7 @@ Rendered:
 ### JSON Output
 
 ```bash copy
-lighthouse-badges https://example.com -j
+npx github:hidao80/lighthouse-badges https://example.com -j
 ```
 
 Output:
@@ -78,7 +78,7 @@ Output:
 ### SVG Output
 
 ```bash copy
-lighthouse-badges https://example.com -s
+npx github:hidao80/lighthouse-badges https://example.com -s
 ```
 
 Outputs an SVG string with donut charts for each score.
@@ -201,13 +201,13 @@ docker run lighthouse-badges https://example.com
 ### Run directly
 
 ```bash copy
-bunx github:hidao80/lighthouse-badges https://example.com
+npx github:hidao80/lighthouse-badges https://example.com
 ```
 
-Or with npm:
+Or with Bun:
 
 ```bash copy
-npx github:hidao80/lighthouse-badges https://example.com
+bunx github:hidao80/lighthouse-badges https://example.com
 ```
 
 ## Development

@@ -7,7 +7,7 @@ lighthouse-badges runs Google Lighthouse audits against a given URL and outputs 
 ## Usage
 
 ```
-lighthouse-badges <URL> [options]
+npx github:hidao80/lighthouse-badges <URL> [options]
 ```
 
 Options:
