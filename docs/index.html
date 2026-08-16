@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -54,31 +54,35 @@
 
 <!-- Pico CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-<style>
-  :root { --pico-font-size: 100%; }
-  .hero { text-align: center; padding: 3rem 0 2rem; }
-  .hero .emoji { font-size: 4rem; line-height: 1; }
-  .badges-row img { margin: 0.15rem; }
-  pre { position: relative; }
-  code.lang-badge { font-size: 0.75em; opacity: 0.7; }
-  table.colors td:first-child, table.colors th:first-child { width: 40%; }
-  .score-green { color: #0cce6b; font-weight: bold; }
-  .score-yellow { color: #ffa400; font-weight: bold; }
-  .score-red { color: #ff4e42; font-weight: bold; }
-  footer.container { text-align: center; padding: 2rem 0; opacity: 0.75; }
-  .theme-toggle { position: fixed; top: 1rem; right: 1rem; z-index: 10; }
-</style>
+<link rel="stylesheet" href="style.css">
+
+<!-- multilanguagejs -->
+<script src="https://unpkg.com/multilanguagejs@2.0.1/dist/multilanguagejs.umd.cjs"></script>
 </head>
 <body>
 
-<button class="theme-toggle secondary outline" id="theme-toggle" aria-label="Toggle light/dark theme">🌓</button>
+<select class="lang-select" id="lang-select" aria-label="Language">
+  <option value="en">English</option>
+  <option value="ja">日本語</option>
+  <option value="zh">中文</option>
+  <option value="es">Español</option>
+  <option value="ru">Русский</option>
+</select>
 
 <main class="container">
 
   <section class="hero">
     <div class="emoji">🔦</div>
     <h1>lighthouse-badges</h1>
-    <p>Generate Lighthouse score badges, JSON, or SVG donut charts — straight from your terminal, using local Chrome.</p>
+    <p>
+      <template type="language-group">
+        <span language="en">Generate Lighthouse score badges, JSON, or SVG donut charts — straight from your terminal, using local Chrome.</span>
+        <span language="ja">Lighthouseスコアバッジ・JSON・SVGドーナツチャートを、ローカルChromeを使ってターミナルから直接生成。</span>
+        <span language="zh">直接从终端使用本地 Chrome 生成 Lighthouse 分数徽章、JSON 或 SVG 环形图。</span>
+        <span language="es">Genera insignias de puntuación Lighthouse, JSON o gráficos de dona SVG directamente desde tu terminal, usando Chrome local.</span>
+        <span language="ru">Создавайте значки оценок Lighthouse, JSON или SVG-диаграммы прямо из терминала, используя локальный Chrome.</span>
+      </template>
+    </p>
     <div class="badges-row">
       <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
       <img src="https://github.com/hidao80/lighthouse-badges/actions/workflows/lint.yml/badge.svg" alt="Lint status">
@@ -86,40 +90,209 @@
       <img src="https://github.com/hidao80/lighthouse-badges/actions/workflows/build.yml/badge.svg" alt="Build status">
     </div>
     <div class="grid" style="max-width: 420px; margin: 1.5rem auto 0;">
-      <a href="#quick-start" role="button">Get Started</a>
+      <a href="#quick-start" role="button">
+        <template type="language-group">
+          <span language="en">Get Started</span>
+          <span language="ja">はじめる</span>
+          <span language="zh">开始使用</span>
+          <span language="es">Empezar</span>
+          <span language="ru">Начать</span>
+        </template>
+      </a>
       <a href="https://github.com/hidao80/lighthouse-badges" role="button" class="secondary">View on GitHub</a>
     </div>
   </section>
 
   <section id="install">
-    <h2>Installation</h2>
-    <pre><code>npm install -g lighthouse-badges</code></pre>
-    <h3>Requirements</h3>
+    <h2>
+      <template type="language-group">
+        <span language="en">Installation</span>
+        <span language="ja">インストール</span>
+        <span language="zh">安装</span>
+        <span language="es">Instalación</span>
+        <span language="ru">Установка</span>
+      </template>
+    </h2>
+    <p>
+      <template type="language-group">
+        <span language="en">Install once as a global command, then run it from anywhere without cloning the repo.</span>
+        <span language="ja">グローバルコマンドとして一度インストールすれば、リポジトリをクローンせずどこからでも実行できる。</span>
+        <span language="zh">全局安装一次后，无需克隆仓库即可在任何位置运行。</span>
+        <span language="es">Instálalo una vez como comando global y ejecútalo desde cualquier lugar sin clonar el repositorio.</span>
+        <span language="ru">Установите один раз как глобальную команду и запускайте её из любого места без клонирования репозитория.</span>
+      </template>
+    </p>
+    <div class="code-row">
+      <pre><code>bun add -g lighthouse-badges</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+    <h3>
+      <template type="language-group">
+        <span language="en">Requirements</span>
+        <span language="ja">必要環境</span>
+        <span language="zh">环境要求</span>
+        <span language="es">Requisitos</span>
+        <span language="ru">Требования</span>
+      </template>
+    </h3>
     <ul>
       <li>Node.js &gt;= 18.0.0</li>
-      <li>Google Chrome installed on your system</li>
+      <li>
+        <template type="language-group">
+          <span language="en">Google Chrome installed on your system</span>
+          <span language="ja">システムにGoogle Chromeがインストールされていること</span>
+          <span language="zh">系统已安装 Google Chrome</span>
+          <span language="es">Google Chrome instalado en tu sistema</span>
+          <span language="ru">Google Chrome, установленный в системе</span>
+        </template>
+      </li>
     </ul>
   </section>
 
   <section id="usage">
-    <h2>Usage</h2>
-    <pre><code>lighthouse-badges &lt;URL&gt; [options]</code></pre>
+    <h2>
+      <template type="language-group">
+        <span language="en">Usage</span>
+        <span language="ja">使い方</span>
+        <span language="zh">用法</span>
+        <span language="es">Uso</span>
+        <span language="ru">Использование</span>
+      </template>
+    </h2>
+    <p>
+      <template type="language-group">
+        <span language="en">Pass a URL as the first argument. lighthouse-badges launches a local headless Chrome, runs a Lighthouse audit against it, and prints performance, accessibility, best-practices, and SEO scores in the format you choose.</span>
+        <span language="ja">第一引数にURLを渡すと、ローカルのヘッドレスChromeを起動してLighthouse監査を実行し、performance・accessibility・best-practices・SEOの各スコアを指定形式で出力する。</span>
+        <span language="zh">将 URL 作为第一个参数传入，lighthouse-badges 会启动本地无头 Chrome 运行 Lighthouse 审计，并以指定格式输出 performance、accessibility、best-practices、SEO 分数。</span>
+        <span language="es">Pasa una URL como primer argumento. lighthouse-badges lanza un Chrome headless local, ejecuta una auditoría Lighthouse y muestra las puntuaciones de performance, accessibility, best-practices y SEO en el formato elegido.</span>
+        <span language="ru">Передайте URL первым аргументом. lighthouse-badges запускает локальный headless Chrome, выполняет аудит Lighthouse и выводит оценки performance, accessibility, best-practices и SEO в выбранном формате.</span>
+      </template>
+    </p>
+    <div class="code-row">
+      <pre><code>npx github:hidao80/lighthouse-badges &lt;URL&gt; [options]</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
     <table>
-      <thead><tr><th>Option</th><th>Description</th></tr></thead>
+      <thead><tr>
+        <th>
+          <template type="language-group">
+            <span language="en">Option</span>
+            <span language="ja">オプション</span>
+            <span language="zh">选项</span>
+            <span language="es">Opción</span>
+            <span language="ru">Опция</span>
+          </template>
+        </th>
+        <th>
+          <template type="language-group">
+            <span language="en">Description</span>
+            <span language="ja">説明</span>
+            <span language="zh">说明</span>
+            <span language="es">Descripción</span>
+            <span language="ru">Описание</span>
+          </template>
+        </th>
+      </tr></thead>
       <tbody>
-        <tr><td><em>(none)</em></td><td>Output Markdown badges</td></tr>
-        <tr><td><code>-b</code>, <code>--badge</code></td><td>Output Markdown badges</td></tr>
-        <tr><td><code>-j</code>, <code>--json</code></td><td>Output JSON</td></tr>
-        <tr><td><code>-s</code>, <code>--svg</code></td><td>Output SVG with donut charts</td></tr>
+        <tr><td><em>
+          <template type="language-group">
+            <span language="en">(none)</span>
+            <span language="ja">(なし)</span>
+            <span language="zh">(无)</span>
+            <span language="es">(ninguna)</span>
+            <span language="ru">(нет)</span>
+          </template>
+        </em></td><td>
+          <template type="language-group">
+            <span language="en">Output Markdown badges</span>
+            <span language="ja">Markdownバッジを出力</span>
+            <span language="zh">输出 Markdown 徽章</span>
+            <span language="es">Genera insignias en Markdown</span>
+            <span language="ru">Вывод значков в формате Markdown</span>
+          </template>
+        </td></tr>
+        <tr><td><code>-b</code>, <code>--badge</code></td><td>
+          <template type="language-group">
+            <span language="en">Output Markdown badges</span>
+            <span language="ja">Markdownバッジを出力</span>
+            <span language="zh">输出 Markdown 徽章</span>
+            <span language="es">Genera insignias en Markdown</span>
+            <span language="ru">Вывод значков в формате Markdown</span>
+          </template>
+        </td></tr>
+        <tr><td><code>-j</code>, <code>--json</code></td><td>
+          <template type="language-group">
+            <span language="en">Output JSON</span>
+            <span language="ja">JSONを出力</span>
+            <span language="zh">输出 JSON</span>
+            <span language="es">Genera JSON</span>
+            <span language="ru">Вывод в формате JSON</span>
+          </template>
+        </td></tr>
+        <tr><td><code>-s</code>, <code>--svg</code></td><td>
+          <template type="language-group">
+            <span language="en">Output SVG with donut charts</span>
+            <span language="ja">ドーナツチャート付きSVGを出力</span>
+            <span language="zh">输出带环形图的 SVG</span>
+            <span language="es">Genera SVG con gráficos de dona</span>
+            <span language="ru">Вывод SVG с кольцевыми диаграммами</span>
+          </template>
+        </td></tr>
       </tbody>
     </table>
   </section>
 
   <section id="examples">
-    <h2>Examples</h2>
+    <h2>
+      <template type="language-group">
+        <span language="en">Examples</span>
+        <span language="ja">実行例</span>
+        <span language="zh">示例</span>
+        <span language="es">Ejemplos</span>
+        <span language="ru">Примеры</span>
+      </template>
+    </h2>
+    <p>
+      <template type="language-group">
+        <span language="en">Each example below audits https://example.com and prints the same scores in a different format.</span>
+        <span language="ja">以下の各例は https://example.com を監査し、同じスコアを異なる形式で出力する。</span>
+        <span language="zh">以下每个示例都会审计 https://example.com，并以不同格式输出相同的分数。</span>
+        <span language="es">Cada ejemplo audita https://example.com e imprime las mismas puntuaciones en un formato distinto.</span>
+        <span language="ru">Каждый пример ниже проверяет https://example.com и выводит одни и те же оценки в разных форматах.</span>
+      </template>
+    </p>
 
-    <h3>Markdown badges (default)</h3>
-    <pre><code>lighthouse-badges https://example.com</code></pre>
+    <h3>
+      <template type="language-group">
+        <span language="en">Markdown badges (default)</span>
+        <span language="ja">Markdownバッジ（デフォルト）</span>
+        <span language="zh">Markdown 徽章（默认）</span>
+        <span language="es">Insignias Markdown (por defecto)</span>
+        <span language="ru">Значки Markdown (по умолчанию)</span>
+      </template>
+    </h3>
+    <p>
+      <template type="language-group">
+        <span language="en">The default mode — a row of shields.io badges, one per category, ready to paste into a README.</span>
+        <span language="ja">デフォルトの出力形式。カテゴリごとのshields.ioバッジをMarkdownとして並べ、READMEにそのまま貼り付け可能。</span>
+        <span language="zh">默认模式——每个类别一个 shields.io 徽章，可直接粘贴到 README 中。</span>
+        <span language="es">Modo por defecto: una fila de insignias shields.io, una por categoría, lista para pegar en un README.</span>
+        <span language="ru">Режим по умолчанию — ряд значков shields.io, по одному на категорию, готовых для вставки в README.</span>
+      </template>
+    </p>
+    <div class="code-row">
+      <pre><code>npx github:hidao80/lighthouse-badges https://example.com</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
     <p>
       <img src="https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square" alt="Accessibility">
       <img src="https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square" alt="Best Practices">
@@ -127,8 +300,31 @@
       <img src="https://img.shields.io/badge/SEO-90-brightgreen?style=flat-square" alt="SEO">
     </p>
 
-    <h3>JSON output</h3>
-    <pre><code>lighthouse-badges https://example.com -j</code></pre>
+    <h3>
+      <template type="language-group">
+        <span language="en">JSON output</span>
+        <span language="ja">JSON出力</span>
+        <span language="zh">JSON 输出</span>
+        <span language="es">Salida JSON</span>
+        <span language="ru">Вывод JSON</span>
+      </template>
+    </h3>
+    <p>
+      <template type="language-group">
+        <span language="en">Use -j / --json for raw numeric scores, useful for scripting or CI checks.</span>
+        <span language="ja">-j / --json で生のスコアを数値として取得。スクリプトやCIでの判定に利用できる。</span>
+        <span language="zh">使用 -j / --json 获取原始数值分数，便于脚本处理或 CI 检查。</span>
+        <span language="es">Usa -j / --json para obtener las puntuaciones numéricas en bruto, útil para scripts o comprobaciones de CI.</span>
+        <span language="ru">Используйте -j / --json для получения необработанных числовых оценок — удобно для скриптов или проверок CI.</span>
+      </template>
+    </p>
+    <div class="code-row">
+      <pre><code>npx github:hidao80/lighthouse-badges https://example.com -j</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
     <pre><code>{
   "performance": 100,
   "accessibility": 100,
@@ -136,8 +332,31 @@
   "seo": 72
 }</code></pre>
 
-    <h3>SVG output</h3>
-    <pre><code>lighthouse-badges https://example.com -s</code></pre>
+    <h3>
+      <template type="language-group">
+        <span language="en">SVG output</span>
+        <span language="ja">SVG出力</span>
+        <span language="zh">SVG 输出</span>
+        <span language="es">Salida SVG</span>
+        <span language="ru">Вывод SVG</span>
+      </template>
+    </h3>
+    <p>
+      <template type="language-group">
+        <span language="en">Use -s / --svg for a self-contained donut chart per category — no external image service required.</span>
+        <span language="ja">-s / --svg でカテゴリごとの自己完結型ドーナツチャートを取得。外部の画像サービスは不要。</span>
+        <span language="zh">使用 -s / --svg 获取每个类别独立的环形图——无需外部图片服务。</span>
+        <span language="es">Usa -s / --svg para obtener un gráfico de dona autónomo por categoría, sin necesidad de un servicio de imágenes externo.</span>
+        <span language="ru">Используйте -s / --svg для получения самодостаточной кольцевой диаграммы по каждой категории — внешний сервис изображений не нужен.</span>
+      </template>
+    </p>
+    <div class="code-row">
+      <pre><code>npx github:hidao80/lighthouse-badges https://example.com -s</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
     <svg width="480" height="120" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lighthouse score donut charts: 94, 100, 90, 72">
       <g transform="translate(0, 0)">
         <circle cx="60" cy="60" r="16" fill="none" stroke="#e0e0e0" stroke-width="8" transform="rotate(-90 60 60)" />
@@ -171,27 +390,132 @@
   </section>
 
   <section id="colors">
-    <h2>Badge Colors</h2>
+    <h2>
+      <template type="language-group">
+        <span language="en">Badge Colors</span>
+        <span language="ja">バッジの色</span>
+        <span language="zh">徽章颜色</span>
+        <span language="es">Colores de las insignias</span>
+        <span language="ru">Цвета значков</span>
+      </template>
+    </h2>
+    <p>
+      <template type="language-group">
+        <span language="en">Both badges and SVG donuts use the same thresholds to pick a color for each score.</span>
+        <span language="ja">バッジとSVGドーナツチャートは、同じ閾値でスコアごとの色を決めている。</span>
+        <span language="zh">徽章和 SVG 环形图使用相同的分数阈值来决定颜色。</span>
+        <span language="es">Tanto las insignias como los gráficos de dona SVG usan los mismos umbrales para elegir el color de cada puntuación.</span>
+        <span language="ru">И значки, и SVG-диаграммы используют одни и те же пороги для выбора цвета каждой оценки.</span>
+      </template>
+    </p>
     <table class="colors">
-      <thead><tr><th>Score</th><th>Color</th></tr></thead>
+      <thead><tr>
+        <th>
+          <template type="language-group">
+            <span language="en">Score</span>
+            <span language="ja">スコア</span>
+            <span language="zh">分数</span>
+            <span language="es">Puntuación</span>
+            <span language="ru">Оценка</span>
+          </template>
+        </th>
+        <th>
+          <template type="language-group">
+            <span language="en">Color</span>
+            <span language="ja">色</span>
+            <span language="zh">颜色</span>
+            <span language="es">Color</span>
+            <span language="ru">Цвет</span>
+          </template>
+        </th>
+      </tr></thead>
       <tbody>
-        <tr><td>90–100</td><td class="score-green">Green</td></tr>
-        <tr><td>50–89</td><td class="score-yellow">Yellow</td></tr>
-        <tr><td>0–49</td><td class="score-red">Red</td></tr>
+        <tr><td>90–100</td><td class="score-green">
+          <template type="language-group">
+            <span language="en">Green</span>
+            <span language="ja">緑</span>
+            <span language="zh">绿色</span>
+            <span language="es">Verde</span>
+            <span language="ru">Зелёный</span>
+          </template>
+        </td></tr>
+        <tr><td>50–89</td><td class="score-yellow">
+          <template type="language-group">
+            <span language="en">Yellow</span>
+            <span language="ja">黄</span>
+            <span language="zh">黄色</span>
+            <span language="es">Amarillo</span>
+            <span language="ru">Жёлтый</span>
+          </template>
+        </td></tr>
+        <tr><td>0–49</td><td class="score-red">
+          <template type="language-group">
+            <span language="en">Red</span>
+            <span language="ja">赤</span>
+            <span language="zh">红色</span>
+            <span language="es">Rojo</span>
+            <span language="ru">Красный</span>
+          </template>
+        </td></tr>
       </tbody>
     </table>
   </section>
 
   <section id="quick-start">
-    <h2>Quick Start</h2>
+    <h2>
+      <template type="language-group">
+        <span language="en">Quick Start</span>
+        <span language="ja">クイックスタート</span>
+        <span language="zh">快速开始</span>
+        <span language="es">Inicio rápido</span>
+        <span language="ru">Быстрый старт</span>
+      </template>
+    </h2>
+    <p>
+      <template type="language-group">
+        <span language="en">Two ways to try lighthouse-badges without a permanent install.</span>
+        <span language="ja">恒久的にインストールせずlighthouse-badgesを試す2つの方法。</span>
+        <span language="zh">两种无需永久安装即可试用 lighthouse-badges 的方式。</span>
+        <span language="es">Dos formas de probar lighthouse-badges sin una instalación permanente.</span>
+        <span language="ru">Два способа попробовать lighthouse-badges без постоянной установки.</span>
+      </template>
+    </p>
 
-    <h3>Run with Docker</h3>
-    <pre><code># Production build
+    <h3>
+      <template type="language-group">
+        <span language="en">Run with Docker</span>
+        <span language="ja">Dockerで実行</span>
+        <span language="zh">使用 Docker 运行</span>
+        <span language="es">Ejecutar con Docker</span>
+        <span language="ru">Запуск через Docker</span>
+      </template>
+    </h3>
+    <div class="code-row">
+      <pre><code># Production build
 docker build -t lighthouse-badges .
 docker run lighthouse-badges https://example.com</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
 
-    <h3>Run directly</h3>
-    <pre><code>npx github:hidao80/lighthouse-badges https://example.com</code></pre>
+    <h3>
+      <template type="language-group">
+        <span language="en">Run directly</span>
+        <span language="ja">直接実行</span>
+        <span language="zh">直接运行</span>
+        <span language="es">Ejecutar directamente</span>
+        <span language="ru">Запуск напрямую</span>
+      </template>
+    </h3>
+    <div class="code-row">
+      <pre><code>npx github:hidao80/lighthouse-badges https://example.com</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
   </section>
 
 </main>
@@ -199,26 +523,20 @@ docker run lighthouse-badges https://example.com</code></pre>
 <footer class="container">
   <p>
     <a href="https://github.com/hidao80/lighthouse-badges">GitHub</a> ·
-    <a href="https://github.com/hidao80/lighthouse-badges/blob/main/LICENSE">MIT License</a> ·
+    <a href="https://github.com/hidao80/lighthouse-badges/blob/main/LICENSE">
+      <template type="language-group">
+        <span language="en">MIT License</span>
+        <span language="ja">MITライセンス</span>
+        <span language="zh">MIT 许可证</span>
+        <span language="es">Licencia MIT</span>
+        <span language="ru">Лицензия MIT</span>
+      </template>
+    </a> ·
     <a href="https://deepwiki.com/hidao80/lighthouse-badges">Ask DeepWiki</a>
   </p>
 </footer>
 
-<script>
-  (() => {
-    var root = document.documentElement;
-    var toggle = document.getElementById('theme-toggle');
-    var stored = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    root.setAttribute('data-theme', stored || (prefersDark ? 'dark' : 'light'));
-
-    toggle.addEventListener('click', () => {
-      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
-  })();
-</script>
+<script src="main.min.js"></script>
 
 </body>
 </html>
