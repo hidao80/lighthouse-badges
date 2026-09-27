@@ -20,7 +20,7 @@ Badge colors: 90–100 green, 50–89 yellow, 0–49 red.
 ## Install
 
 ```
-npm install -g @hidao80/lighthouse-badges
+npm install -g @hidao/lighthouse-badges
 ```
 
 Or run without installing:
@@ -46,4 +46,4 @@ docker run lighthouse-badges <URL>
 ## Optional
 
 - [DeepWiki](https://deepwiki.com/hidao80/lighthouse-badges): auto-generated codebase Q&A
-- [npm package](https://www.npmjs.com/package/@hidao80/lighthouse-badges)
+- [npm package](https://www.npmjs.com/package/@hidao/lighthouse-badges)

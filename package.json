@@ -1,5 +1,5 @@
 {
-  "name": "@hidao80/lighthouse-badges",
+  "name": "@hidao/lighthouse-badges",
   "version": "1.0.0",
   "description": "Generate Lighthouse score badges, JSON, or SVG using local Lighthouse",
   "type": "module",

@@ -754,12 +754,12 @@ all).
 
 ---
 
-## ADR-0022: Scope the npm package name to avoid a registry name collision (`@hidao80/lighthouse-badges`)
+## ADR-0022: Scope the npm package name to avoid a registry name collision (`@hidao/lighthouse-badges`)
 
 - **Status**: Accepted
 - **Date**: 2026-09-27
 - **Related commits**: `cc4acfc` update package name and documentation to
-  reflect scoped package @hidao80/lighthouse-badges
+  reflect scoped package @hidao/lighthouse-badges
 
 ### Context
 
@@ -776,7 +776,7 @@ instructions today would silently install the wrong, unrelated package.
 
 ### Decision
 
-- Renamed `package.json#name` to the scoped name `@hidao80/lighthouse-badges`.
+- Renamed `package.json#name` to the scoped name `@hidao/lighthouse-badges`.
 - Added `package.json#publishConfig.access: "public"`, since npm scoped
   packages default to restricted (private) visibility on publish and would
   otherwise fail (or require a paid org) without this.
@@ -795,11 +795,11 @@ instructions today would silently install the wrong, unrelated package.
 
 ### Consequences
 
-- Once published, `npm install -g @hidao80/lighthouse-badges` / `bun add -g
-  @hidao80/lighthouse-badges` will install the intended package instead of
+- Once published, `npm install -g @hidao/lighthouse-badges` / `bun add -g
+  @hidao/lighthouse-badges` will install the intended package instead of
   the unrelated `emazzotta/lighthouse-badges`.
 - Running the published package via `npx`/`bunx` must also use the scoped
-  form (`npx @hidao80/lighthouse-badges <URL>`); `AGENTS.md` was updated to
+  form (`npx @hidao/lighthouse-badges <URL>`); `AGENTS.md` was updated to
   reflect this instead of the previous unscoped assumption.
 - `docs/ADR.md` (the published mirror of this file) needs the same entry
   added to stay in sync, per the doc/code divergence risk already noted in
@@ -862,4 +862,4 @@ instructions today would silently install the wrong, unrelated package.
 | 2026-09-27 | `f22727d` | Pinned workflow Actions to commit SHAs ([ADR-0020](#adr-0020)) |
 | 2026-09-27 | `3ef97f9` | Updated `AGENTS.md` tech-stack/testing description (docs only) |
 | 2026-09-27 | `0602dd9` | Documented `bin/` recommit / dropped install-time build as ADR-0021 (docs/ADR.md only; the code change landed earlier in `5204d24`) |
-| 2026-09-27 | `cc4acfc` | Scoped npm package name to `@hidao80/lighthouse-badges` ([ADR-0022](#adr-0022)) |
+| 2026-09-27 | `cc4acfc` | Scoped npm package name to `@hidao/lighthouse-badges` ([ADR-0022](#adr-0022)) |
