@@ -1,6 +1,6 @@
 # Architecture Decision Record (ADR) — lighthouse-badges
 
-This document analyzes the `git log` history (56 commits, 2026-01-18 to
+This document analyzes the `git log` history (68 commits, 2026-01-18 to
 2026-09-27) and reconstructs the project's major design decisions in ADR
 format.
 
@@ -754,6 +754,61 @@ all).
 
 ---
 
+## ADR-0022: Scope the npm package name to avoid a registry name collision (`@hidao80/lighthouse-badges`)
+
+- **Status**: Accepted
+- **Date**: 2026-09-27
+- **Related commits**: `cc4acfc` update package name and documentation to
+  reflect scoped package @hidao80/lighthouse-badges
+
+### Context
+
+[ADR-0021](#adr-0021) added `package.json#repository`/`#homepage`/`#bugs` in
+preparation for an eventual `npm publish`, on the assumption that the
+unscoped name `lighthouse-badges` was available. Checking the registry
+(`npm view lighthouse-badges repository.url version`) during this session
+found it already belongs to an unrelated package
+(`emazzotta/lighthouse-badges`, currently `v1.5.7`). Publishing under that
+name is impossible, and `README.md`, `docs/index.html`, and `docs/llms.txt`
+already documented `npm install -g lighthouse-badges` / `bun add -g
+lighthouse-badges` as the intended install path — following those
+instructions today would silently install the wrong, unrelated package.
+
+### Decision
+
+- Renamed `package.json#name` to the scoped name `@hidao80/lighthouse-badges`.
+- Added `package.json#publishConfig.access: "public"`, since npm scoped
+  packages default to restricted (private) visibility on publish and would
+  otherwise fail (or require a paid org) without this.
+- Kept `package.json#bin`'s key as `lighthouse-badges` unchanged, so the
+  installed CLI command name is unaffected by the scope — only the npm
+  registry identifier changes.
+- Updated every npm-registry-name reference to the scoped form:
+  `README.md` (`bun add -g` / `npm install -g`), `docs/index.html` (install
+  command and the JSON-LD `downloadUrl`), `docs/llms.txt` (install command
+  and the npm package link), and `AGENTS.md`'s `npx ... once published to
+  npmjs` comment. `bun.lock`'s workspace `name` field was hand-edited to
+  match rather than left to drift until the next `bun install`.
+- Left `bunx`/`npx github:hidao80/lighthouse-badges` (git-based, no-install
+  run) untouched, since those commands never depended on the npm registry
+  name.
+
+### Consequences
+
+- Once published, `npm install -g @hidao80/lighthouse-badges` / `bun add -g
+  @hidao80/lighthouse-badges` will install the intended package instead of
+  the unrelated `emazzotta/lighthouse-badges`.
+- Running the published package via `npx`/`bunx` must also use the scoped
+  form (`npx @hidao80/lighthouse-badges <URL>`); `AGENTS.md` was updated to
+  reflect this instead of the previous unscoped assumption.
+- `docs/ADR.md` (the published mirror of this file) needs the same entry
+  added to stay in sync, per the doc/code divergence risk already noted in
+  [ADR-0014](#adr-0014)'s consequences (KB-03).
+- No runtime/CLI behavior changed — this is a package-identity and
+  documentation change only.
+
+---
+
 ## Commit timeline (reference)
 
 | Date | Commit | Summary |
@@ -806,3 +861,5 @@ all).
 | 2026-09-27 | `8729ab6` | Added `.github/workflows/test.yml` ([ADR-0019](#adr-0019)) |
 | 2026-09-27 | `f22727d` | Pinned workflow Actions to commit SHAs ([ADR-0020](#adr-0020)) |
 | 2026-09-27 | `3ef97f9` | Updated `AGENTS.md` tech-stack/testing description (docs only) |
+| 2026-09-27 | `0602dd9` | Documented `bin/` recommit / dropped install-time build as ADR-0021 (docs/ADR.md only; the code change landed earlier in `5204d24`) |
+| 2026-09-27 | `cc4acfc` | Scoped npm package name to `@hidao80/lighthouse-badges` ([ADR-0022](#adr-0022)) |
