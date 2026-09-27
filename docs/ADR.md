@@ -424,7 +424,7 @@ to the actual build output path: `package.json#bin` and `#scripts.start` to
 
 ## ADR-0014: Stop committing `dist/`; build on install via `prepare` / `prepack`
 
-- **Status**: Accepted (supersedes [ADR-0004](#adr-0004))
+- **Status**: Superseded by [ADR-0021](#adr-0021) (supersedes [ADR-0004](#adr-0004))
 - **Date**: 2026-08-16
 - **Related commits**: `6e46b7f` stop tracking dist/ build output (deletes tracked `dist/*`),
   `6372b55` add takumi-guard security gate (adds `dist/` to `.gitignore`),
@@ -679,6 +679,78 @@ commit SHA, keeping the version as a trailing comment for readability:
   can drift out of sync if one is edited without the other.
 - All four workflow files (`audit.yml`, `build.yml`, `lint.yml`, `test.yml`)
   now share the identical three-step setup sequence pinned to the same SHAs.
+
+---
+
+## ADR-0021: Recommit `bin/`; drop the install-time `prepare`/`prepack` build (supersedes ADR-0014)
+
+- **Status**: Accepted (supersedes [ADR-0014](#adr-0014))
+- **Date**: 2026-09-27
+
+### Context
+
+[ADR-0014](#adr-0014) moved the build to install time (`prepare`/`prepack`
+running `bun run build`) so `dist/` would not need to be committed. This
+repo's own `.npmrc` sets `ignore-scripts=true` ([ADR-0008](#adr-0008)) and
+was flagged as an open risk to that approach (KB-09 in `known_bugs.md`): an
+end user's `bunx`/`npx github:hidao80/lighthouse-badges` install runs
+`bun install`/`npm install` as a root project, which is exactly the install
+path `ignore-scripts` is designed to suppress lifecycle scripts for.
+
+This was verified empirically in this session by copying the working tree
+(with `prepare: "tsc"`, the state KB-09 left `package.json` in) into an
+isolated directory and running `bun install` there, simulating the
+clone-then-install step `bunx`/`npx github:...` performs internally: no
+`dist/` was produced and the CLI failed to start (`Cannot find module
+'.../dist/lighthouse-badges.js'`). Removing `.npmrc` from that same directory
+and repeating the install did produce `dist/` and a runnable CLI, confirming
+`ignore-scripts=true` — not a separate bug — was the cause. Since `.npmrc`
+ships with the repository and is not something an end user opts out of,
+`bunx`/`npx github:...` was broken for every consumer, not just an edge case
+(KB-09's "Unconfirmed" is now confirmed, and worse than speculated: the
+install doesn't merely "possibly fail without Bun" — it fails outright
+regardless of Bun's presence, because the lifecycle script never runs at
+all).
+
+### Decision
+
+- Renamed the compiled-output directory from `dist/` to `bin/`
+  (`tsconfig.json#compilerOptions.outDir`) and committed it to git
+  (`package.json#files`, `.gitignore` no longer excludes it) — the opposite
+  direction from [ADR-0014](#adr-0014), back toward [ADR-0004](#adr-0004)'s
+  original approach, but under a new directory name to signal "distribution
+  artifact" rather than reusing the now-loaded term `dist/`.
+- Removed the `"prepare"` and `"prepack"` scripts from `package.json`
+  entirely, since no install-time build is needed once `bin/` is committed;
+  `"prepublishOnly"` (`bun run build`) remains as the pre-`npm publish`
+  safety net for maintainers, who run it in an environment where they
+  control `ignore-scripts` themselves.
+- `.npmrc`'s `ignore-scripts=true` is kept as-is ([ADR-0008](#adr-0008)) —
+  the fix works around it rather than weakening it, so the supply-chain
+  hardening it provides is preserved for both maintainers and consumers.
+- Updated `package.json#bin`, `#scripts.start`, and the Dockerfile
+  `ENTRYPOINT`/`COPY` from `dist/` to `bin/` (mirroring the path-sync
+  discipline [ADR-0013](#adr-0013) established).
+- Added `package.json#repository`/`#homepage`/`#bugs` in preparation for an
+  eventual `npm publish` to npmjs.org, so `npm install -g lighthouse-badges`
+  and `npx lighthouse-badges` (registry install, not `github:`) also have
+  the metadata npm expects on a published package page.
+
+### Consequences
+
+- `bunx`/`npx github:hidao80/lighthouse-badges` now runs the committed
+  `bin/lighthouse-badges.js` immediately after `git clone`, with no build
+  step and no dependency on `ignore-scripts` behavior at all — the KB-09
+  failure mode is eliminated by construction, not by relying on an install
+  flag a consumer doesn't control.
+- The src/`bin` drift risk that motivated [ADR-0014](#adr-0014) (and that
+  [ADR-0013](#adr-0013) show materializing under the old `dist/bin/` layout)
+  returns: `src/` changes require `bun run build` and a `bin/` diff commit,
+  with no CI check enforcing that today.
+- `docs/ADR.md`/`AGENTS.md`/`README.md` were updated in the same pass to
+  describe `bin/` as committed and to drop references to install-time
+  `prepare`/`prepack` building `dist/`, avoiding the kind of doc/code
+  divergence [ADR-0014](#adr-0014) itself left behind (KB-03).
 
 ---
 
