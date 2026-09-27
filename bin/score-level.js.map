@@ -1,0 +1,1 @@
+{"version":3,"file":"score-level.js","sourceRoot":"","sources":["../src/score-level.ts"],"names":[],"mappings":"AAEA;;;;;;;GAOG;AACH,MAAM,UAAU,aAAa,CAAC,KAAoB;IAChD,IAAI,KAAK,KAAK,IAAI;QAAE,OAAO,SAAS,CAAC;IACrC,IAAI,KAAK,IAAI,EAAE;QAAE,OAAO,MAAM,CAAC;IAC/B,IAAI,KAAK,IAAI,EAAE;QAAE,OAAO,SAAS,CAAC;IAClC,OAAO,MAAM,CAAC;AAChB,CAAC"}
