@@ -4,16 +4,23 @@
   "description": "Generate Lighthouse score badges, JSON, or SVG using local Lighthouse",
   "type": "module",
   "bin": {
-    "lighthouse-badges": "./dist/lighthouse-badges.js"
+    "lighthouse-badges": "./bin/lighthouse-badges.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hidao80/lighthouse-badges.git"
+  },
+  "homepage": "https://github.com/hidao80/lighthouse-badges#readme",
+  "bugs": {
+    "url": "https://github.com/hidao80/lighthouse-badges/issues"
   },
   "scripts": {
-    "prepare": "bun run build",
-    "prepack": "bun run build",
     "build": "tsc",
     "dev": "tsc --watch",
     "lint": "biome check src/ tests/",
     "test": "vitest",
-    "start": "node ./dist/lighthouse-badges.js",
+    "test:coverage": "vitest run --coverage",
+    "start": "node ./bin/lighthouse-badges.js",
     "prepublishOnly": "bun run build",
     "act": "act -l",
     "act:audit": "act -j audit",
@@ -34,7 +41,7 @@
     "node": ">=22.19"
   },
   "files": [
-    "dist"
+    "bin"
   ],
   "dependencies": {
     "chrome-launcher": "^1.2.1",
@@ -43,6 +50,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
     "@types/node": "^26.6.3",
+    "@vitest/coverage-v8": "^5.0.2",
     "typescript": "^7.0.2",
     "vitest": "^5.0.2"
   },
