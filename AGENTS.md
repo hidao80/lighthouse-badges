@@ -32,30 +32,32 @@ tests/
     generate-svg.test.ts
   integration/          Full-CLI integration tests (Chrome/Lighthouse mocked, renderers real)
     lighthouse-badges.test.ts
-dist/                 Compiled output (tsc), COMMITTED to git — see ADR-0004
+bin/                  Compiled output (tsc), committed to git — no install-time build step (ADR-0021, supersedes ADR-0014)
 docs/                 ADR.md, landing page (index.html), llms.txt, social-preview.png
-.github/workflows/    lint.yml, audit.yml, build.yml
+.github/workflows/    lint.yml, test.yml, audit.yml, build.yml
 ```
 
 ## Build, lint, run
 
 ```bash
 bun install              # install deps
-bun run build             # tsc -> dist/
+bun run build             # tsc -> bin/
 bun run dev               # tsc --watch
 bun run lint               # biome check src/ tests/
-node dist/lighthouse-badges.js <URL> [-j|-s]   # run built CLI
-bunx github:hidao80/lighthouse-badges <URL>    # run without cloning (also: npx github:...)
+node bin/lighthouse-badges.js <URL> [-j|-s]    # run built CLI
+bunx github:hidao80/lighthouse-badges <URL>    # run without cloning (also: npx once published to npmjs)
 ```
 
-`dist/` is intentionally tracked in git so `npx`/`bunx github:...` works without
-a build step for end users. **Whenever you change `src/`, run `bun run build`
-and commit the resulting `dist/` diff in the same change** — a source/dist
-mismatch is a real bug users will hit directly, not just a stale-artifact
-nuisance.
+`bin/` is committed to git (`package.json#files`, tsc's `outDir`). Run
+`bun run build` after changing `src/` and commit the resulting `bin/` diff —
+CI does not do this for you. This repo's `.npmrc` sets `ignore-scripts=true`
+([ADR-0008](#adr-0008)), which also suppresses lifecycle scripts (`prepare`/
+`prepack`) during `npx`/`bunx github:...` installs; committing `bin/` means
+those installs need no build step at all, so `ignore-scripts` doesn't have to
+be relaxed for end users (ADR-0021, supersedes ADR-0014's install-time build).
 
 The package's `bin` entry and the Docker `ENTRYPOINT` both point at
-`dist/lighthouse-badges.js` (flat, no `dist/bin/` subfolder — `tsc`'s
+`bin/lighthouse-badges.js` (flat, no `bin/bin/` subfolder — `tsc`'s
 `outDir`/`rootDir` mirror `src/` exactly). If you ever restructure `src/`,
 keep `package.json#bin`, `package.json#scripts.start`, and the Dockerfile's
 `ENTRYPOINT` in sync with wherever `tsc` actually emits the entry file.
@@ -78,10 +80,11 @@ keep `package.json#bin`, `package.json#scripts.start`, and the Dockerfile's
 - **JSDoc on exported and module-internal functions.** Existing functions in
   `fetch-lighthouse.ts`, `generate-markdown.ts`, `generate-svg.ts` carry
   `@param`/`@returns` JSDoc blocks — match that pattern for new functions.
-- Non-obvious decisions (why Bun, why `dist/` is committed, why CI splits
-  into three workflows, why `.npmrc` hardens installs, etc.) were deliberate.
-  Check `git log`/`git blame` before re-litigating one or "fixing" something
-  that was intentional.
+- Non-obvious decisions (why Bun, why `bin/` is committed instead of built at
+  install time, why CI splits into separate workflows, why `.npmrc` hardens
+  installs, etc.) were deliberate. Check `git log`/`git blame` or
+  `docs/ADR.md` before re-litigating one or "fixing" something that was
+  intentional.
 
 ## CI
 
@@ -92,8 +95,8 @@ Four independent GitHub Actions workflows, all triggered on push/PR to
 
 ## Docker
 
-Multi-stage build: `oven/bun:1-alpine` compiles `src/` → `dist/`, then a
-`node:22.19-bookworm-slim` + `chromium` runtime stage copies only `dist/`,
+Multi-stage build: `oven/bun:1-alpine` compiles `src/` → `bin/`, then a
+`node:22.19-bookworm-slim` + `chromium` runtime stage copies only `bin/`,
 `node_modules`, and `package.json` in, running as a non-root `nodejs` user.
 Lighthouse needs a real Chrome/Chromium binary at runtime — that's the entire
 reason the runtime stage exists instead of shipping the builder image.

@@ -28,6 +28,12 @@ npm install -g lighthouse-badges
 ## Usage
 
 ```bash copy
+bunx github:hidao80/lighthouse-badges <URL> [options]
+```
+
+Or with npx:
+
+```bash copy
 npx github:hidao80/lighthouse-badges <URL> [options]
 ```
 
@@ -45,7 +51,7 @@ npx github:hidao80/lighthouse-badges <URL> [options]
 ### Markdown Badges (default)
 
 ```bash copy
-npx github:hidao80/lighthouse-badges https://example.com
+bunx github:hidao80/lighthouse-badges https://example.com
 ```
 
 Output:
@@ -61,7 +67,7 @@ Rendered:
 ### JSON Output
 
 ```bash copy
-npx github:hidao80/lighthouse-badges https://example.com -j
+bunx github:hidao80/lighthouse-badges https://example.com -j
 ```
 
 Output:
@@ -78,7 +84,7 @@ Output:
 ### SVG Output
 
 ```bash copy
-npx github:hidao80/lighthouse-badges https://example.com -s
+bunx github:hidao80/lighthouse-badges https://example.com -s
 ```
 
 Outputs an SVG string with donut charts for each score.
@@ -201,26 +207,27 @@ docker run lighthouse-badges https://example.com
 ### Run directly
 
 ```bash copy
-npx github:hidao80/lighthouse-badges https://example.com
+bunx github:hidao80/lighthouse-badges https://example.com
 ```
 
-Or with Bun:
+Or with npx:
 
 ```bash copy
-bunx github:hidao80/lighthouse-badges https://example.com
+npx github:hidao80/lighthouse-badges https://example.com
 ```
 
 ## Development
 
 ```bash copy
 bun install
-bun run build   # tsc -> dist/
+bun run build   # tsc -> bin/
 bun run dev     # tsc --watch
-bun run lint    # biome check src/
+bun run lint    # biome check src/ tests/
 ```
 
-The `prepare` script (`tsc`) builds `dist/` automatically when installed via
-`npx`/`bunx github:...`, so `dist/` does not need to be committed. See
+`bin/` is the compiled CLI and is committed to git, so `npx`/`bunx github:...`
+runs it directly with no install-time build step. After changing `src/`, run
+`bun run build` and commit the resulting `bin/` diff. See
 [AGENTS.md](AGENTS.md) for the full contributor guide and
 [docs/ADR.md](docs/ADR.md) for the reasoning behind these choices.
 
