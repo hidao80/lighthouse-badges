@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "lighthouse-badges",
+      "name": "@hidao80/lighthouse-badges",
       "dependencies": {
         "chrome-launcher": "^1.2.1",
         "lighthouse": "^13.5.0",

@@ -1,5 +1,5 @@
 {
-  "name": "lighthouse-badges",
+  "name": "@hidao80/lighthouse-badges",
   "version": "1.0.0",
   "description": "Generate Lighthouse score badges, JSON, or SVG using local Lighthouse",
   "type": "module",
@@ -37,6 +37,9 @@
     "seo"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=22.19"
   },

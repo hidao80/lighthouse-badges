@@ -45,7 +45,7 @@ bun run build             # tsc -> bin/
 bun run dev               # tsc --watch
 bun run lint               # biome check src/ tests/
 node bin/lighthouse-badges.js <URL> [-j|-s]    # run built CLI
-bunx github:hidao80/lighthouse-badges <URL>    # run without cloning (also: npx once published to npmjs)
+bunx github:hidao80/lighthouse-badges <URL>    # run without cloning (also: npx @hidao80/lighthouse-badges once published to npmjs)
 ```
 
 `bin/` is committed to git (`package.json#files`, tsc's `outDir`). Run

@@ -11,13 +11,13 @@ A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome 
 ## Installation
 
 ```bash copy
-bun add -g lighthouse-badges
+bun add -g @hidao80/lighthouse-badges
 ```
 
 Or with npm:
 
 ```bash copy
-npm install -g lighthouse-badges
+npm install -g @hidao80/lighthouse-badges
 ```
 
 ## Requirements
