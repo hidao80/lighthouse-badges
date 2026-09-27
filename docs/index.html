@@ -77,7 +77,7 @@
     <p>
       <template type="language-group">
         <span language="en">Generate Lighthouse score badges, JSON, or SVG donut charts — straight from your terminal, using local Chrome.</span>
-        <span language="ja">Lighthouseスコアバッジ・JSON・SVGドーナツチャートを、ローカルChromeを使ってターミナルから直接生成。</span>
+        <span language="ja">Lighthouseスコアバッジ・JSON・SVG円グラフを、ローカルChromeを使ってターミナルから直接生成。</span>
         <span language="zh">直接从终端使用本地 Chrome 生成 Lighthouse 分数徽章、JSON 或 SVG 环形图。</span>
         <span language="es">Genera insignias de puntuación Lighthouse, JSON o gráficos de dona SVG directamente desde tu terminal, usando Chrome local.</span>
         <span language="ru">Создавайте значки оценок Lighthouse, JSON или SVG-диаграммы прямо из терминала, используя локальный Chrome.</span>
@@ -124,7 +124,7 @@
       </template>
     </p>
     <div class="code-row">
-      <pre><code>bun add -g github:hidao80/lighthouse-badges</code></pre>
+      <pre><code>bun add -g lighthouse-badges</code></pre>
       <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
         <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -239,7 +239,7 @@
         <tr><td><code>-s</code>, <code>--svg</code></td><td>
           <template type="language-group">
             <span language="en">Output SVG with donut charts</span>
-            <span language="ja">ドーナツチャート付きSVGを出力</span>
+            <span language="ja">円グラフ付きSVGを出力</span>
             <span language="zh">输出带环形图的 SVG</span>
             <span language="es">Genera SVG con gráficos de dona</span>
             <span language="ru">Вывод SVG с кольцевыми диаграммами</span>
@@ -298,7 +298,7 @@
       <img src="https://img.shields.io/badge/Accessibility-94-brightgreen?style=flat-square" alt="Accessibility">
       <img src="https://img.shields.io/badge/Best_Practices-100-brightgreen?style=flat-square" alt="Best Practices">
       <img src="https://img.shields.io/badge/Performance-93-brightgreen?style=flat-square" alt="Performance">
-      <img src="https://img.shields.io/badge/SEO-90-brightgreen?style=flat-square" alt="SEO">
+      <img src="https://img.shields.io/badge/SEO-72-yellow?style=flat-square" alt="SEO">
     </p>
 
     <h3>
@@ -345,7 +345,7 @@
     <p>
       <template type="language-group">
         <span language="en">Use -s / --svg for a self-contained donut chart per category — no external image service required.</span>
-        <span language="ja">-s / --svg でカテゴリごとの自己完結型ドーナツチャートを取得。外部の画像サービスは不要。</span>
+        <span language="ja">-s / --svg でカテゴリごとの自己完結型円グラフを取得。外部の画像サービスは不要。</span>
         <span language="zh">使用 -s / --svg 获取每个类别独立的环形图——无需外部图片服务。</span>
         <span language="es">Usa -s / --svg para obtener un gráfico de dona autónomo por categoría, sin necesidad de un servicio de imágenes externo.</span>
         <span language="ru">Используйте -s / --svg для получения самодостаточной кольцевой диаграммы по каждой категории — внешний сервис изображений не нужен.</span>
@@ -403,7 +403,7 @@
     <p>
       <template type="language-group">
         <span language="en">Both badges and SVG donuts use the same thresholds to pick a color for each score.</span>
-        <span language="ja">バッジとSVGドーナツチャートは、同じ閾値でスコアごとの色を決めている。</span>
+        <span language="ja">バッジとSVG円グラフは、同じ閾値でスコアごとの色を決めている。</span>
         <span language="zh">徽章和 SVG 环形图使用相同的分数阈值来决定颜色。</span>
         <span language="es">Tanto las insignias como los gráficos de dona SVG usan los mismos umbrales para elegir el color de cada puntuación.</span>
         <span language="ru">И значки, и SVG-диаграммы используют одни и те же пороги для выбора цвета каждой оценки.</span>
