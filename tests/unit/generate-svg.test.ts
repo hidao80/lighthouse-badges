@@ -55,4 +55,15 @@ describe('generateSvg', () => {
     expect(svg).toContain(`stroke-dasharray="${circumference}"`);
     expect(svg).toContain('stroke-dashoffset="0"');
   });
+
+  it('renders a null score as an N/A label with a grey, empty donut', () => {
+    const svg = generateSvg({ ...baseScores, seo: null });
+    const radius = 16;
+    const circumference = 2 * Math.PI * radius;
+    const seoDonut = svg.split('translate(360, 0)')[1] ?? '';
+
+    expect(seoDonut).toContain('#9e9e9e');
+    expect(seoDonut).toContain(`stroke-dashoffset="${circumference}"`);
+    expect(svg).toMatch(/<text[^>]*>\s*N\/A\s*<\/text>/);
+  });
 });

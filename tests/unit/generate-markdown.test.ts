@@ -44,4 +44,10 @@ describe('generateMarkdown', () => {
 
     expect(markdown).toContain('SEO-0-red');
   });
+
+  it('renders a null score as N/A with a lightgrey badge', () => {
+    const markdown = generateMarkdown({ ...baseScores, seo: null });
+
+    expect(markdown).toContain('SEO-N%2FA-lightgrey');
+  });
 });

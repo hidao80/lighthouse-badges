@@ -5,6 +5,7 @@ const lighthouseMock = vi.fn();
 const mkdtempSyncMock = vi.fn();
 const rmSyncMock = vi.fn();
 const killMock = vi.fn().mockResolvedValue(undefined);
+const existsSyncMock = vi.fn().mockReturnValue(false);
 
 vi.mock('chrome-launcher', () => ({
   launch: (...args: unknown[]) => launchMock(...args),
@@ -17,6 +18,7 @@ vi.mock('lighthouse', () => ({
 vi.mock('node:fs', () => ({
   mkdtempSync: (...args: unknown[]) => mkdtempSyncMock(...args),
   rmSync: (...args: unknown[]) => rmSyncMock(...args),
+  existsSync: (...args: unknown[]) => existsSyncMock(...args),
 }));
 
 const sampleCategories = {
@@ -110,6 +112,19 @@ describe('lighthouse-badges CLI (integration)', () => {
 
     expect(errorSpy).toHaveBeenCalledWith(
       expect.stringContaining('Usage: lighthouse-badges'),
+    );
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
+  it('exits with an error for an unrecognized option', async () => {
+    const { errorSpy, exitSpy } = await runCli([
+      'https://example.com',
+      '--unknown-flag',
+    ]);
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Error:',
+      'Unknown option: --unknown-flag',
     );
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
