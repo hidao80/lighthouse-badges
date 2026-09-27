@@ -1,11 +1,25 @@
-import { mkdtempSync, rmSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import * as chromeLauncher from 'chrome-launcher';
 import lighthouse from 'lighthouse';
 import type { LighthouseScores } from './types.js';
 
-// Set TEMP to current directory for lighthouse temp files
-const cwd = resolve('.');
+// Chrome's own sandbox needs privileges that most container runtimes deny;
+// only drop it when we detect we're actually inside a container.
+function isRunningInContainer(): boolean {
+  return existsSync('/.dockerenv') || process.env.container !== undefined;
+}
+
+/**
+ * Round a Lighthouse category's 0-1 score to a 0-100 integer, preserving
+ * `null` for a category that wasn't evaluated instead of coercing it to 0.
+ * @param score - Raw category score (0-1), or null/undefined if unevaluated.
+ * @returns Rounded 0-100 score, or null if the category has no score.
+ */
+function roundScore(score: number | null | undefined): number | null {
+  return score == null ? null : Math.round(score * 100);
+}
 
 /**
  * Launch headless Chrome and run Lighthouse against the given URL.
@@ -15,19 +29,21 @@ const cwd = resolve('.');
 export async function fetchLighthouseScores(
   url: string,
 ): Promise<LighthouseScores> {
-  const userDataDir = mkdtempSync(resolve(cwd, '.lighthouse-'));
+  const userDataDir = mkdtempSync(join(tmpdir(), '.lighthouse-'));
 
-  const chrome = await chromeLauncher.launch({
-    chromeFlags: [
-      '--headless',
-      '--disable-gpu',
-      '--no-sandbox',
-      `--user-data-dir=${userDataDir}`,
-    ],
-    userDataDir: userDataDir,
-  });
+  let chrome: chromeLauncher.LaunchedChrome | undefined;
 
   try {
+    chrome = await chromeLauncher.launch({
+      chromeFlags: [
+        '--headless',
+        '--disable-gpu',
+        ...(isRunningInContainer() ? ['--no-sandbox'] : []),
+        `--user-data-dir=${userDataDir}`,
+      ],
+      userDataDir: userDataDir,
+    });
+
     const result = await lighthouse(
       url,
       {
@@ -51,20 +67,27 @@ export async function fetchLighthouseScores(
     const categories = result.lhr.categories;
 
     return {
-      performance: Math.round((categories.performance?.score ?? 0) * 100),
-      accessibility: Math.round((categories.accessibility?.score ?? 0) * 100),
-      bestPractices: Math.round(
-        (categories['best-practices']?.score ?? 0) * 100,
-      ),
-      seo: Math.round((categories.seo?.score ?? 0) * 100),
+      performance: roundScore(categories.performance?.score),
+      accessibility: roundScore(categories.accessibility?.score),
+      bestPractices: roundScore(categories['best-practices']?.score),
+      seo: roundScore(categories.seo?.score),
     };
   } finally {
-    await chrome.kill();
+    if (chrome) {
+      try {
+        await chrome.kill();
+      } catch {
+        // Chrome may already be gone; the temp dir still needs removing below.
+      }
+    }
 
-    // Wait for the chrome object to release the temporary folder
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Delete the temporary folder again. We waited for chrome to release the lock.
-    rmSync(userDataDir, { recursive: true, force: true });
+    // Chrome may briefly keep the folder locked after kill(); retry instead
+    // of always paying a fixed delay.
+    rmSync(userDataDir, {
+      recursive: true,
+      force: true,
+      maxRetries: 3,
+      retryDelay: 200,
+    });
   }
 }

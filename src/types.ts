@@ -1,8 +1,8 @@
 export interface LighthouseScores {
-  performance: number;
-  accessibility: number;
-  bestPractices: number;
-  seo: number;
+  performance: number | null;
+  accessibility: number | null;
+  bestPractices: number | null;
+  seo: number | null;
 }
 
 export type OutputMode = 'markdown' | 'json' | 'svg';

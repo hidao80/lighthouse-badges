@@ -1,27 +1,35 @@
+import { getScoreLevel, type ScoreLevel } from './score-level.js';
 import type { LighthouseScores } from './types.js';
 
+const DONUT_COLORS: Record<ScoreLevel, string> = {
+  good: '#0cce6b',
+  average: '#ffa400',
+  poor: '#ff4e42',
+  unknown: '#9e9e9e',
+};
+
 /**
- * Map a 0-100 score to a donut-chart stroke color.
- * @param score - Lighthouse score (0-100).
- * @returns Hex color: green (>=90), amber (>=50), or red.
+ * Map a 0-100 score (or null) to a donut-chart stroke color.
+ * @param score - Lighthouse score (0-100), or null if unevaluated.
+ * @returns Hex color: green (>=90), amber (>=50), red, or grey (unevaluated).
  */
-function getSvgColor(score: number): string {
-  if (score >= 90) return '#0cce6b';
-  if (score >= 50) return '#ffa400';
-  return '#ff4e42';
+function getSvgColor(score: number | null): string {
+  return DONUT_COLORS[getScoreLevel(score)];
 }
 
 /**
  * Build a single donut-chart SVG fragment for one score.
- * @param score - Lighthouse score (0-100).
+ * @param score - Lighthouse score (0-100), or null if unevaluated.
  * @param color - Stroke color for the filled arc and label text.
  * @param x - Horizontal translate offset for this donut within the parent SVG.
- * @returns SVG `<g>` markup for the donut and its centered score label.
+ * @returns SVG `<g>` markup for the donut and its centered score/`N/A` label.
  */
-function createDonut(score: number, color: string, x: number): string {
+function createDonut(score: number | null, color: string, x: number): string {
   const radius = 16;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - score / 100);
+  const offset =
+    score === null ? circumference : circumference * (1 - score / 100);
+  const label = score === null ? 'N/A' : score;
 
   return `
     <g transform="translate(${x}, 0)">
@@ -30,7 +38,7 @@ function createDonut(score: number, color: string, x: number): string {
         stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
         stroke-linecap="round" transform="rotate(-90 60 60)" />
       <text x="60" y="70" text-anchor="middle" font-size="22" font-family="Arial" fill="${color}">
-        ${score}
+        ${label}
       </text>
     </g>
   `;
