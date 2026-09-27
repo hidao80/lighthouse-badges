@@ -23,8 +23,11 @@ background: true
     name: analyzed-{basename}
     description: {State the purpose in one sentence.}
     metadata:
-        type: analysis
-        commit-hash: {target commit hash}
+      type: analysis
+      commit-hash: {target commit hash}
+      toc:
+        - {title: {Category Name}, anchor: {#category-name}}
+          - {title: {Subcategory Name}, anchor: {#subcategory-name}}
     ---
     ```
 
