@@ -93,7 +93,7 @@ Four independent GitHub Actions workflows, all triggered on push/PR to
 ## Docker
 
 Multi-stage build: `oven/bun:1-alpine` compiles `src/` → `dist/`, then a
-`node:22-bookworm-slim` + `chromium` runtime stage copies only `dist/`,
+`node:22.19-bookworm-slim` + `chromium` runtime stage copies only `dist/`,
 `node_modules`, and `package.json` in, running as a non-root `nodejs` user.
 Lighthouse needs a real Chrome/Chromium binary at runtime — that's the entire
 reason the runtime stage exists instead of shipping the builder image.

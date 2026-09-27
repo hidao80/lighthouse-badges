@@ -1,7 +1,7 @@
 # Architecture Decision Record (ADR) — lighthouse-badges
 
-This document analyzes the `git log` history (26 commits, 2026-01-18 to
-2026-08-14) and reconstructs the project's major design decisions in ADR
+This document analyzes the `git log` history (56 commits, 2026-01-18 to
+2026-09-27) and reconstructs the project's major design decisions in ADR
 format.
 
 ---
@@ -93,7 +93,7 @@ the README.
 
 ## ADR-0004: Commit build output (`dist/`) to the repo to enable direct `npx github:...` execution
 
-- **Status**: Accepted
+- **Status**: Superseded by [ADR-0014](#adr-0014)
 - **Date**: 2026-01-18
 - **Related commits**: `354469f` Add core functionality (removed `dist/` from `.gitignore`),
   `91e5c12` Update command from pnpm to npx for running script
@@ -422,6 +422,266 @@ to the actual build output path: `package.json#bin` and `#scripts.start` to
 
 ---
 
+## ADR-0014: Stop committing `dist/`; build on install via `prepare` / `prepack`
+
+- **Status**: Accepted (supersedes [ADR-0004](#adr-0004))
+- **Date**: 2026-08-16
+- **Related commits**: `6e46b7f` stop tracking dist/ build output (deletes tracked `dist/*`),
+  `6372b55` add takumi-guard security gate (adds `dist/` to `.gitignore`),
+  `9724344` update README and package.json for automatic dist build,
+  `ad9748b` build script back to plain `tsc`,
+  `80f4885` Dockerfile `bun install --ignore-scripts`
+
+### Context
+
+[ADR-0004](#adr-0004) committed `dist/` so `npx github:...` could run without a
+build step, at the cost of manual rebuild-and-commit on every `src/` change.
+[ADR-0013](#adr-0013) showed that cost materializing: stale tracked output
+(`dist/bin/*`) silently broke `bin`, `start` and the Docker `ENTRYPOINT`.
+Speculative: removing the src/dist drift class of bug was the main motive;
+the commit messages state only what changed, not why.
+
+### Decision
+
+- Deleted all tracked `dist/*` files (`6e46b7f`) and added `dist/` to
+  `.gitignore` (`6372b55`; the `.gitignore` line landed in the following
+  commit, not the one whose message announces it).
+- Added `"prepare": "bun run build"` and `"prepack": "bun run build"` to
+  `package.json` so `npx`/`bunx github:...` and `npm pack`/publish compile
+  `dist/` at install time (`9724344`). `build` briefly became `tsc -b` and was
+  reverted to `tsc` (`ad9748b`).
+- README contributor note rewritten: `dist/` no longer needs to be committed.
+- Dockerfile builder stage installs with `--ignore-scripts` (`80f4885`).
+  Speculative: `bun.lock`/`package.json` are copied before the sources, so
+  `prepare` would run `tsc` with no `src/` present; skipping lifecycle
+  scripts there and building explicitly after `COPY . .` avoids that.
+
+### Consequences
+
+- The src/dist drift class of bug from [ADR-0013](#adr-0013) disappears from
+  the repository; the tracked tree holds source only.
+- `npx github:hidao80/lighthouse-badges` now depends on the install-time
+  build succeeding on the user's machine. `prepare` calls `bun run build`, so
+  an environment without Bun may fail at this step (Unconfirmed; tracked as
+  KB-09 in `known_bugs.md`).
+- Speculative: the repo's own `.npmrc` sets `ignore-scripts=true`
+  ([ADR-0008](#adr-0008)); whether a consumer's `npx github:` install honors or
+  bypasses its own `ignore-scripts` setting for `prepare` was not verified.
+- `docs/ADR.md` (the published ADR) and `AGENTS.md` still describe the
+  committed-`dist/` policy; they are out of sync with this decision (KB-03).
+
+---
+
+## ADR-0015: Gate CI dependency installs with takumi-guard and let Dependabot track Actions
+
+- **Status**: Accepted
+- **Date**: 2026-08-16 (takumi-guard), 2026-09-05 (Dependabot)
+- **Related commits**: `6372b55` add takumi-guard security gate to workflows,
+  `25c093d` Add GitHub Actions to Dependabot configuration
+
+### Context
+
+[ADR-0008](#adr-0008) hardened local installs through `.npmrc`
+(`ignore-scripts`, `min-release-age`). CI still installed packages with only
+`bun audit` as a check, which reports known advisories but does not block a
+freshly published malicious package. Workflow actions (`actions/checkout`,
+`oven-sh/setup-bun`, etc.) were pinned by major tag with no update mechanism.
+
+### Decision
+
+- Added `flatt-security/setup-takumi-guard-npm@v1` as the first step of the
+  `audit`, `lint` and `build` jobs, before `bun install`. The commit message
+  states the intent: "so supply-chain checks gate every CI job".
+- Added `.github/dependabot.yml` with the `github-actions` ecosystem on a
+  weekly schedule.
+
+### Consequences
+
+- Every CI job depends on a third-party action and its availability
+  (Speculative: an outage of that service would block all jobs).
+- Dependabot covers GitHub Actions only; no `npm`/`bun` ecosystem entry exists,
+  so npm dependency bumps stay manual.
+- Actions remain referenced by tag, not commit SHA; Dependabot bumps tags but
+  does not pin to SHAs.
+
+---
+
+## ADR-0016: Run GitHub Actions locally with `act`
+
+- **Status**: Accepted
+- **Date**: 2026-08-16
+- **Related commits**: `efd4287` scaffold local act configuration,
+  `6372b55` (adds the act-only docker CLI step to `build.yml`),
+  `466239f` migrate slash-command docs to skills (adds `setup-act` skill)
+
+### Context
+
+The three workflows ([ADR-0006](#adr-0006)) could only be validated by pushing.
+The runners mix `ubuntu-slim` and `ubuntu-latest` ([ADR-0007](#adr-0007)),
+which `act` does not map to images by default.
+
+### Decision
+
+- Added `.actrc` mapping both `ubuntu-latest` and `ubuntu-slim` to
+  `catthehacker/ubuntu:act-24.04`.
+- Added `package.json` scripts `act`, `act:audit`, `act:build`, `act:lint`.
+- `build.yml` gained an `Install docker CLI (act only)` step guarded by
+  `if: ${{ env.ACT }}`, so the `docker build` step works inside the act
+  container while GitHub-hosted runs skip it.
+
+### Consequences
+
+- Workflows can be exercised locally before pushing.
+- Both runner labels share one image under act, so `ubuntu-slim`-specific
+  differences are not reproduced locally.
+- Speculative: the act-only step mounts/uses the host Docker daemon, so local
+  `act:build` requires Docker access from inside the act container.
+
+---
+
+## ADR-0017: Major dependency upgrade — Lighthouse 13, TypeScript 7, `@types/node` 26
+
+- **Status**: Accepted
+- **Date**: 2026-08-14
+- **Related commits**: `dc142e4` update dependencies for improved compatibility and features
+
+### Context
+
+The commit message gives only "improved compatibility and features"; the
+concrete motive is not recorded (Speculative: keeping pace with upstream
+Lighthouse audit changes).
+
+### Decision
+
+- `lighthouse`: `^12.8.2` → `^13.4.1`
+- `typescript`: `^5.9.3` → `^7.0.2`
+- `@types/node`: `^20.19.43` → `^26.2.0`
+
+### Consequences
+
+- `package.json#engines` and the README still declare Node `>=18`, while
+  the resolved Lighthouse 13 line requires a much newer Node (KB-01 in
+  `known_bugs.md`). The declared support range no longer reflects reality.
+- Lighthouse major versions can change category scoring; badge values for the
+  same site may shift across the upgrade (Speculative, not measured).
+
+---
+
+## ADR-0018: Restructure the landing page — split assets, client-side i18n via CDN, OS-driven theme
+
+- **Status**: Accepted
+- **Date**: 2026-08-16
+- **Related commits**: `21670ba` add multi-language support and copy buttons to landing page,
+  `ec840da` update installation command on the landing page
+
+### Context
+
+`docs/index.html` (GitHub Pages) carried inline CSS and JS and a manual theme
+toggle (last touched in `c0c7dce`), in English only.
+
+### Decision
+
+Per the commit message and diff:
+- Split inline assets into `docs/style.css`, `docs/main.js` and a
+  `docs/main.min.js` (the page loads the minified file; no `package.json`
+  script generates it).
+- Added `multilanguagejs@2.0.1` loaded from `unpkg.com` for en/ja/zh/es/ru,
+  with browser-language detection and `localStorage` persistence.
+- Dropped the manual theme toggle in favor of `prefers-color-scheme`.
+- Added copy-to-clipboard buttons on command blocks and a max content width.
+
+### Consequences
+
+- The page gains a runtime third-party script dependency on unpkg without
+  Subresource Integrity (Speculative risk: CDN compromise or outage affects
+  the page).
+- `main.js` and `main.min.js` must be kept in sync manually; no build step
+  generates the minified file.
+- Users lose the explicit theme override and follow the OS setting only.
+
+---
+
+## ADR-0019: Add a vitest unit/integration test suite and wire it into CI
+
+- **Status**: Accepted
+- **Date**: 2026-09-27
+- **Related commits**: `67153fd` add integration and unit tests for lighthouse-badges CLI
+  and related functions, `8729ab6` add GitHub Actions workflow for testing on push and
+  pull request, `cf2632c` update dependencies and enhance linting configuration (adds
+  `act:test` script, extends `lint` to `tests/`)
+
+### Context
+
+`package.json` has declared a `"test": "vitest"` script and the `vitest`
+devDependency since the very first commit (`ce66290`), but no test file ever
+existed and no CI job ran it — a gap the code-analyze audit had been tracking
+as an open finding (KB-04 in `known_bugs.md`). `src/fetch-lighthouse.ts`,
+`generate-markdown.ts`, and `generate-svg.ts` had no automated coverage.
+
+### Decision
+
+- Added `tests/unit/fetch-lighthouse.test.ts`, `tests/unit/generate-markdown.test.ts`,
+  `tests/unit/generate-svg.test.ts`, and `tests/integration/lighthouse-badges.test.ts`
+  (341 lines total), mocking Chrome launch/Lighthouse/filesystem calls.
+- Added `.github/workflows/test.yml`: a `test` job on `ubuntu-slim` running
+  `bun run test -- --run` on `push`/`pull_request` to `main`, following the
+  same runner-by-job-nature rule as [ADR-0007](#adr-0007) (no Docker build
+  involved) and the same setup steps (`checkout` → `setup-takumi-guard-npm` →
+  `setup-bun`) as the other three workflows.
+- Added an `act:test` script to `package.json` (mirrors `act:audit`/`act:build`/
+  `act:lint` from [ADR-0016](#adr-0016)) and widened the `lint` script from
+  `biome check src/` to `biome check src/ tests/` so the new test files are
+  linted too.
+
+### Consequences
+
+- CI now runs 21 test cases across 4 files (verified via `bun run test -- --run`)
+  on every push/PR, closing the previously-declared-but-unused test
+  infrastructure gap.
+- `src/`, `tests/`, and CI now form a closed loop: `lint`, `test`, and (for
+  `main`) `build`/`audit` all gate the same branch.
+- Test files mock Chrome/Lighthouse rather than launching a real browser, so
+  CI does not need Chromium installed for `test.yml` (unlike `build.yml`'s
+  Docker image, which still bundles it per [ADR-0005](#adr-0005)).
+
+---
+
+## ADR-0020: Pin third-party GitHub Actions to commit SHAs instead of version tags
+
+- **Status**: Accepted
+- **Date**: 2026-09-27
+- **Related commits**: `f22727d` update action versions in workflow files for consistency
+
+### Context
+
+`audit.yml`, `build.yml`, `lint.yml`, and (per [ADR-0019](#adr-0019)) `test.yml`
+referenced `actions/checkout`, `flatt-security/setup-takumi-guard-npm`, and
+`oven-sh/setup-bun` by mutable version tag (`@v7`, `@v1`, `@v2`). A tag can be
+moved to point at different code after the fact, which weakens the
+supply-chain gate [ADR-0015](#adr-0015) had just added via takumi-guard and
+Dependabot. Speculative: the commit message ("for consistency") does not state
+the security rationale explicitly.
+
+### Decision
+
+Replaced the tag reference in all four workflow files with the resolved
+commit SHA, keeping the version as a trailing comment for readability:
+`actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1`,
+`flatt-security/setup-takumi-guard-npm@6d4182745c1e474c35a023573c2612c085be45a4 # v1.2.0`,
+`oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0`.
+
+### Consequences
+
+- A tag being re-pointed after the fact (accidentally or maliciously) can no
+  longer silently change what a workflow runs.
+- Dependabot ([ADR-0015](#adr-0015)) must now bump both the SHA and the
+  version comment on every update, instead of a one-line tag bump; the two
+  can drift out of sync if one is edited without the other.
+- All four workflow files (`audit.yml`, `build.yml`, `lint.yml`, `test.yml`)
+  now share the identical three-step setup sequence pinned to the same SHAs.
+
+---
+
 ## Commit timeline (reference)
 
 | Date | Commit | Summary |
@@ -452,3 +712,25 @@ to the actual build output path: `package.json#bin` and `#scripts.start` to
 | 2026-08-14 | `6c6baf3` | Added Claude command docs (`code-analyze`, `make-lp`, `make-social-preview`, `update-adr`) |
 | 2026-08-14 | `7084d50` | Updated `.claude/settings.local.json` permissions for Bun |
 | 2026-08-14 | `c0c7dce` | `docs/index.html`: theme-toggle script to arrow functions |
+| 2026-08-14 | `39c608b` | README Bun install/dev commands; added `docs/ADR.md` |
+| 2026-08-14 | `526eceb` | Added `.editorconfig` |
+| 2026-08-14 | `dc142e4` | Lighthouse 13 / TypeScript 7 / `@types/node` 26 ([ADR-0017](#adr-0017)) |
+| 2026-08-16 | `6e46b7f` | Deleted tracked `dist/*` ([ADR-0014](#adr-0014)) |
+| 2026-08-16 | `6372b55` | takumi-guard in all workflows, act docker step, `dist/` in `.gitignore` ([ADR-0014](#adr-0014), [ADR-0015](#adr-0015)) |
+| 2026-08-16 | `466239f` | `.claude/commands/*` → `.claude/skills/*`; added `setup-act` skill |
+| 2026-08-16 | `efd4287` | `.actrc` + `act:*` scripts ([ADR-0016](#adr-0016)) |
+| 2026-08-16 | `b888ed9` | README/llms.txt: `bun add -g` / `npx github:` as primary commands |
+| 2026-08-16 | `21670ba` | Landing page i18n, asset split, copy buttons ([ADR-0018](#adr-0018)) |
+| 2026-08-16 | `9724344` | `prepare`/`prepack` build hooks; README drops committed-`dist/` note |
+| 2026-08-16 | `ec840da` | Landing page install command fix |
+| 2026-08-16 | `ad9748b` | `build`: `tsc -b` → `tsc` |
+| 2026-08-16 | `e6289c3` | `bun.lock` version pins |
+| 2026-08-16 | `80f4885` | Dockerfile `bun install --ignore-scripts` |
+| 2026-08-16 | `b1ee329` | `make-social-preview` skill: Twemoji vector instructions |
+| 2026-09-05 | `25c093d` | Dependabot for GitHub Actions ([ADR-0015](#adr-0015)) |
+| 2026-09-27 | `1058ac8` | Updated `.claude/skills/*` SKILL.md docs (Claude tooling, not product architecture) |
+| 2026-09-27 | `cf2632c` | Dependency bumps (lighthouse/biome/@types/node) + `act:test` script + `lint` covers `tests/` ([ADR-0019](#adr-0019)) |
+| 2026-09-27 | `67153fd` | Added unit/integration test suite ([ADR-0019](#adr-0019)) |
+| 2026-09-27 | `8729ab6` | Added `.github/workflows/test.yml` ([ADR-0019](#adr-0019)) |
+| 2026-09-27 | `f22727d` | Pinned workflow Actions to commit SHAs ([ADR-0020](#adr-0020)) |
+| 2026-09-27 | `3ef97f9` | Updated `AGENTS.md` tech-stack/testing description (docs only) |

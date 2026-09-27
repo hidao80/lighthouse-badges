@@ -22,7 +22,7 @@ npm install -g lighthouse-badges
 
 ## Requirements
 
-- Node.js >= 18.0.0
+- Node.js >= 22.19
 - Google Chrome installed on your system
 
 ## Usage

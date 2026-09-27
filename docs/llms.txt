@@ -2,7 +2,7 @@
 
 > A CLI tool to generate Lighthouse score badges, JSON, or SVG donut charts using local Chrome and the Lighthouse npm package.
 
-lighthouse-badges runs Google Lighthouse audits against a given URL and outputs the results as Markdown badges (via shields.io), raw JSON, or self-contained SVG donut charts. It requires Node.js >= 18 and a local Google Chrome installation.
+lighthouse-badges runs Google Lighthouse audits against a given URL and outputs the results as Markdown badges (via shields.io), raw JSON, or self-contained SVG donut charts. It requires Node.js >= 22.19 and a local Google Chrome installation.
 
 ## Usage
 
