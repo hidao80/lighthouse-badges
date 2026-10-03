@@ -4,6 +4,7 @@
 ![Lint](https://github.com/hidao80/lighthouse-badges/actions/workflows/lint.yml/badge.svg)
 ![Audit](https://github.com/hidao80/lighthouse-badges/actions/workflows/audit.yml/badge.svg)
 ![Build](https://github.com/hidao80/lighthouse-badges/actions/workflows/build.yml/badge.svg)
+![Test](https://github.com/hidao80/lighthouse-badges/actions/workflows/test.yml/badge.svg)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/hidao80/lighthouse-badges)
 
 A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome and the Lighthouse npm package.
