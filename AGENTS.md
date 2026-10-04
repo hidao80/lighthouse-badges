@@ -16,27 +16,6 @@ config beyond a URL and an output-mode flag.
 - **Lint/format**: Biome (`biome.json`), not ESLint/Prettier. 2-space indent, single quotes — matches the existing source style.
 - **Test runner**: `vitest`, listed in `devDependencies`. Unit tests live under `tests/unit/`, one file per `src/` module, importing from `../../src/*.js` and mocking external deps (`chrome-launcher`, `lighthouse`, `node:fs`); `tests/integration/` drives `lighthouse-badges.ts` end to end, mocking only that same Chrome/Lighthouse boundary so the real `generateMarkdown`/`generateSvg` wiring runs. `bun run test` runs Vitest in watch mode; use `bun run test -- --run` for a single pass.
 
-## Repository layout
-
-```
-src/                  TypeScript source (5 files, flat — no subfolders)
-  lighthouse-badges.ts   CLI entry point (argv parsing, mode dispatch)
-  fetch-lighthouse.ts    Launches headless Chrome, runs Lighthouse, returns scores
-  generate-markdown.ts   Renders scores as shields.io badge Markdown
-  generate-svg.ts        Renders scores as an SVG with donut charts
-  types.ts               LighthouseScores, OutputMode
-tests/
-  unit/                 Vitest unit tests, one file per src/ module (imports from ../../src/*.js)
-    fetch-lighthouse.test.ts  Mocks chrome-launcher/lighthouse/node:fs
-    generate-markdown.test.ts
-    generate-svg.test.ts
-  integration/          Full-CLI integration tests (Chrome/Lighthouse mocked, renderers real)
-    lighthouse-badges.test.ts
-bin/                  Compiled output (tsc), committed to git — no install-time build step (ADR-0021, supersedes ADR-0014)
-docs/                 ADR.md, landing page (index.html), llms.txt, social-preview.png
-.github/workflows/    lint.yml, test.yml, audit.yml, build.yml
-```
-
 ## Build, lint, run
 
 ```bash
@@ -85,18 +64,3 @@ keep `package.json#bin`, `package.json#scripts.start`, and the Dockerfile's
   installs, etc.) were deliberate. Check `git log`/`git blame` or
   `docs/ADR.md` before re-litigating one or "fixing" something that was
   intentional.
-
-## CI
-
-Four independent GitHub Actions workflows, all triggered on push/PR to
-`main`: `lint.yml` (Biome), `test.yml` (`bun run test -- --run`), `audit.yml`
-(`bun audit`), `build.yml` (Docker build verification). Lint/test/audit run on
-`ubuntu-slim`; build needs the full `ubuntu-latest` runner for Docker tooling.
-
-## Docker
-
-Multi-stage build: `oven/bun:1-alpine` compiles `src/` → `bin/`, then a
-`node:22.19-bookworm-slim` + `chromium` runtime stage copies only `bin/`,
-`node_modules`, and `package.json` in, running as a non-root `nodejs` user.
-Lighthouse needs a real Chrome/Chromium binary at runtime — that's the entire
-reason the runtime stage exists instead of shipping the builder image.
