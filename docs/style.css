@@ -9,6 +9,8 @@ table.colors td:first-child, table.colors th:first-child { width: 40%; }
 .score-green { color: #0cce6b; font-weight: bold; }
 .score-yellow { color: #ffa400; font-weight: bold; }
 .score-red { color: #ff4e42; font-weight: bold; }
+.tech-list { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; list-style: none; margin: 0 auto; padding: 0; }
+.tech-list li { list-style: none; margin: 0; display: inline-flex; align-items: center; white-space: nowrap; line-height: 1.4; color: var(--pico-color); background: var(--pico-code-background-color); border: 1px solid var(--pico-form-element-border-color); border-radius: 999px; padding: 0.4rem 1.1rem; font-size: 0.9rem; }
 footer.container { text-align: center; padding: 2rem 0; opacity: 0.75; }
 .lang-select { position: fixed; top: 1rem; right: 1rem; z-index: 10; width: auto; margin: 0; padding: 0.4rem 2rem 0.4rem 0.75rem; }
 
@@ -30,4 +32,6 @@ footer.container { text-align: center; padding: 2rem 0; opacity: 0.75; }
 
 @media (max-width: 600px) {
   .lang-select { position: static; display: block; margin: 0 auto 0.5rem; }
+  .tech-list { gap: 0.4rem; }
+  .tech-list li { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
 }
