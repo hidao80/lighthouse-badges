@@ -59,6 +59,7 @@
   },
   "overrides": {
     "@opentelemetry/core": ">=2.8.0",
+    "glob": ">=14.0.2",
     "postcss-selector-parser": "^7.1.6"
   }
 }
