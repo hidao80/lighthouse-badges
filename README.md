@@ -221,6 +221,14 @@ npx github:hidao80/lighthouse-badges https://example.com
 
 ## Development
 
+This repository uses [mise](https://mise.jdx.dev/) to manage tool versions
+(see `mise.toml`). Trust the config and install the tools first:
+
+```bash copy
+mise trust
+mise install
+```
+
 ```bash copy
 bun install
 bun run build   # tsc -> bin/
