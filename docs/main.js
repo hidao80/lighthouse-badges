@@ -1,11 +1,12 @@
 (() => {
-  var LANGS = ["en", "ja", "zh", "es", "ru"];
+  var LANGS = ["en", "ja", "zh", "es", "ru", "de"];
   var META = {
     en: { title: "lighthouse-badges — Lighthouse Score Badges from the CLI", description: "A CLI tool that generates Lighthouse score badges, JSON, or SVG donut charts using local Chrome and the Lighthouse npm package." },
     ja: { title: "lighthouse-badges — CLIで作るLighthouseスコアバッジ", description: "ローカルChromeとLighthouse npmパッケージを使い、Lighthouseスコアバッジ・JSON・SVGドーナツチャートを生成するCLIツール。" },
     zh: { title: "lighthouse-badges — 用 CLI 生成 Lighthouse 分数徽章", description: "使用本地 Chrome 和 Lighthouse npm 包生成 Lighthouse 分数徽章、JSON 或 SVG 环形图的命令行工具。" },
     es: { title: "lighthouse-badges — Insignias de puntuación Lighthouse desde la CLI", description: "Herramienta CLI que genera insignias de puntuación Lighthouse, JSON o gráficos de dona SVG usando Chrome local y el paquete npm Lighthouse." },
-    ru: { title: "lighthouse-badges — Значки оценок Lighthouse из CLI", description: "Инструмент CLI для генерации значков оценок Lighthouse, JSON или SVG-диаграмм с помощью локального Chrome и npm-пакета Lighthouse." }
+    ru: { title: "lighthouse-badges — Значки оценок Lighthouse из CLI", description: "Инструмент CLI для генерации значков оценок Lighthouse, JSON или SVG-диаграмм с помощью локального Chrome и npm-пакета Lighthouse." },
+    de: { title: "lighthouse-badges — Lighthouse-Score-Badges aus der CLI", description: "Ein CLI-Tool, das mit lokalem Chrome und dem Lighthouse-npm-Paket Lighthouse-Score-Badges, JSON oder SVG-Ringdiagramme erzeugt." }
   };
 
   var root = document.documentElement;

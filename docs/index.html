@@ -7,8 +7,8 @@
 <meta name="description" content="A CLI tool that generates Lighthouse score badges, JSON, or SVG donut charts using local Chrome and the Lighthouse npm package.">
 <link rel="canonical" href="https://hidao80.github.io/lighthouse-badges/">
 
-<!-- Favicon (emoji) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%A6%3C/text%3E%3C/svg%3E">
+<!-- Favicon (Twemoji: flashlight) -->
+<link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/1f526.svg">
 
 <!-- OGP -->
 <meta property="og:type" content="website">
@@ -34,7 +34,7 @@
   "description": "A CLI tool to generate Lighthouse score badges, JSON, or SVG using local Chrome and the Lighthouse npm package.",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Windows, macOS, Linux",
-  "softwareVersion": "1.0.0",
+  "softwareVersion": "1.0.7",
   "url": "https://hidao80.github.io/lighthouse-badges/",
   "downloadUrl": "https://www.npmjs.com/package/@hidao/lighthouse-badges",
   "license": "https://opensource.org/licenses/MIT",
@@ -67,6 +67,7 @@
   <option value="zh">中文</option>
   <option value="es">Español</option>
   <option value="ru">Русский</option>
+  <option value="de">Deutsch</option>
 </select>
 
 <main class="container">
@@ -81,6 +82,7 @@
         <span language="zh">直接从终端使用本地 Chrome 生成 Lighthouse 分数徽章、JSON 或 SVG 环形图。</span>
         <span language="es">Genera insignias de puntuación Lighthouse, JSON o gráficos de dona SVG directamente desde tu terminal, usando Chrome local.</span>
         <span language="ru">Создавайте значки оценок Lighthouse, JSON или SVG-диаграммы прямо из терминала, используя локальный Chrome.</span>
+        <span language="de">Erzeuge Lighthouse-Score-Badges, JSON oder SVG-Ringdiagramme — direkt im Terminal, mit lokalem Chrome.</span>
       </template>
     </p>
     <div class="badges-row">
@@ -98,6 +100,7 @@
           <span language="zh">开始使用</span>
           <span language="es">Empezar</span>
           <span language="ru">Начать</span>
+          <span language="de">Loslegen</span>
         </template>
       </a>
       <a href="https://github.com/hidao80/lighthouse-badges" role="button" class="secondary">View on GitHub</a>
@@ -112,6 +115,7 @@
         <span language="zh">安装</span>
         <span language="es">Instalación</span>
         <span language="ru">Установка</span>
+        <span language="de">Installation</span>
       </template>
     </h2>
     <p>
@@ -121,6 +125,7 @@
         <span language="zh">全局安装一次后，无需克隆仓库即可在任何位置运行。</span>
         <span language="es">Instálalo una vez como comando global y ejecútalo desde cualquier lugar sin clonar el repositorio.</span>
         <span language="ru">Установите один раз как глобальную команду и запускайте её из любого места без клонирования репозитория.</span>
+        <span language="de">Einmal als globalen Befehl installieren und dann überall ausführen, ohne das Repository zu klonen.</span>
       </template>
     </p>
     <div class="code-row">
@@ -137,6 +142,7 @@
         <span language="zh">环境要求</span>
         <span language="es">Requisitos</span>
         <span language="ru">Требования</span>
+        <span language="de">Voraussetzungen</span>
       </template>
     </h3>
     <ul>
@@ -148,6 +154,7 @@
           <span language="zh">系统已安装 Google Chrome</span>
           <span language="es">Google Chrome instalado en tu sistema</span>
           <span language="ru">Google Chrome, установленный в системе</span>
+          <span language="de">Google Chrome ist auf dem System installiert</span>
         </template>
       </li>
     </ul>
@@ -161,6 +168,7 @@
         <span language="zh">用法</span>
         <span language="es">Uso</span>
         <span language="ru">Использование</span>
+        <span language="de">Verwendung</span>
       </template>
     </h2>
     <p>
@@ -170,6 +178,7 @@
         <span language="zh">将 URL 作为第一个参数传入，lighthouse-badges 会启动本地无头 Chrome 运行 Lighthouse 审计，并以指定格式输出 performance、accessibility、best-practices、SEO 分数。</span>
         <span language="es">Pasa una URL como primer argumento. lighthouse-badges lanza un Chrome headless local, ejecuta una auditoría Lighthouse y muestra las puntuaciones de performance, accessibility, best-practices y SEO en el formato elegido.</span>
         <span language="ru">Передайте URL первым аргументом. lighthouse-badges запускает локальный headless Chrome, выполняет аудит Lighthouse и выводит оценки performance, accessibility, best-practices и SEO в выбранном формате.</span>
+        <span language="de">Übergib eine URL als erstes Argument. lighthouse-badges startet ein lokales Headless-Chrome, führt ein Lighthouse-Audit durch und gibt die Werte für performance, accessibility, best-practices und SEO im gewählten Format aus.</span>
       </template>
     </p>
     <div class="code-row">
@@ -188,6 +197,7 @@
             <span language="zh">选项</span>
             <span language="es">Opción</span>
             <span language="ru">Опция</span>
+            <span language="de">Option</span>
           </template>
         </th>
         <th>
@@ -197,6 +207,7 @@
             <span language="zh">说明</span>
             <span language="es">Descripción</span>
             <span language="ru">Описание</span>
+            <span language="de">Beschreibung</span>
           </template>
         </th>
       </tr></thead>
@@ -208,6 +219,7 @@
             <span language="zh">(无)</span>
             <span language="es">(ninguna)</span>
             <span language="ru">(нет)</span>
+            <span language="de">(keine)</span>
           </template>
         </em></td><td>
           <template type="language-group">
@@ -216,6 +228,7 @@
             <span language="zh">输出 Markdown 徽章</span>
             <span language="es">Genera insignias en Markdown</span>
             <span language="ru">Вывод значков в формате Markdown</span>
+            <span language="de">Markdown-Badges ausgeben</span>
           </template>
         </td></tr>
         <tr><td><code>-b</code>, <code>--badge</code></td><td>
@@ -225,6 +238,7 @@
             <span language="zh">输出 Markdown 徽章</span>
             <span language="es">Genera insignias en Markdown</span>
             <span language="ru">Вывод значков в формате Markdown</span>
+            <span language="de">Markdown-Badges ausgeben</span>
           </template>
         </td></tr>
         <tr><td><code>-j</code>, <code>--json</code></td><td>
@@ -234,6 +248,7 @@
             <span language="zh">输出 JSON</span>
             <span language="es">Genera JSON</span>
             <span language="ru">Вывод в формате JSON</span>
+            <span language="de">JSON ausgeben</span>
           </template>
         </td></tr>
         <tr><td><code>-s</code>, <code>--svg</code></td><td>
@@ -243,6 +258,7 @@
             <span language="zh">输出带环形图的 SVG</span>
             <span language="es">Genera SVG con gráficos de dona</span>
             <span language="ru">Вывод SVG с кольцевыми диаграммами</span>
+            <span language="de">SVG mit Ringdiagrammen ausgeben</span>
           </template>
         </td></tr>
       </tbody>
@@ -257,6 +273,7 @@
         <span language="zh">示例</span>
         <span language="es">Ejemplos</span>
         <span language="ru">Примеры</span>
+        <span language="de">Beispiele</span>
       </template>
     </h2>
     <p>
@@ -266,6 +283,7 @@
         <span language="zh">以下每个示例都会审计 https://example.com，并以不同格式输出相同的分数。</span>
         <span language="es">Cada ejemplo audita https://example.com e imprime las mismas puntuaciones en un formato distinto.</span>
         <span language="ru">Каждый пример ниже проверяет https://example.com и выводит одни и те же оценки в разных форматах.</span>
+        <span language="de">Jedes Beispiel prüft https://example.com und gibt dieselben Werte in einem anderen Format aus.</span>
       </template>
     </p>
 
@@ -276,6 +294,7 @@
         <span language="zh">Markdown 徽章（默认）</span>
         <span language="es">Insignias Markdown (por defecto)</span>
         <span language="ru">Значки Markdown (по умолчанию)</span>
+        <span language="de">Markdown-Badges (Standard)</span>
       </template>
     </h3>
     <p>
@@ -285,6 +304,7 @@
         <span language="zh">默认模式——每个类别一个 shields.io 徽章，可直接粘贴到 README 中。</span>
         <span language="es">Modo por defecto: una fila de insignias shields.io, una por categoría, lista para pegar en un README.</span>
         <span language="ru">Режим по умолчанию — ряд значков shields.io, по одному на категорию, готовых для вставки в README.</span>
+        <span language="de">Der Standardmodus — eine Reihe von shields.io-Badges, eines pro Kategorie, bereit zum Einfügen in ein README.</span>
       </template>
     </p>
     <div class="code-row">
@@ -308,6 +328,7 @@
         <span language="zh">JSON 输出</span>
         <span language="es">Salida JSON</span>
         <span language="ru">Вывод JSON</span>
+        <span language="de">JSON-Ausgabe</span>
       </template>
     </h3>
     <p>
@@ -317,6 +338,7 @@
         <span language="zh">使用 -j / --json 获取原始数值分数，便于脚本处理或 CI 检查。</span>
         <span language="es">Usa -j / --json para obtener las puntuaciones numéricas en bruto, útil para scripts o comprobaciones de CI.</span>
         <span language="ru">Используйте -j / --json для получения необработанных числовых оценок — удобно для скриптов или проверок CI.</span>
+        <span language="de">Mit -j / --json erhältst du die reinen Zahlenwerte, nützlich für Skripte oder CI-Prüfungen.</span>
       </template>
     </p>
     <div class="code-row">
@@ -340,6 +362,7 @@
         <span language="zh">SVG 输出</span>
         <span language="es">Salida SVG</span>
         <span language="ru">Вывод SVG</span>
+        <span language="de">SVG-Ausgabe</span>
       </template>
     </h3>
     <p>
@@ -349,6 +372,7 @@
         <span language="zh">使用 -s / --svg 获取每个类别独立的环形图——无需外部图片服务。</span>
         <span language="es">Usa -s / --svg para obtener un gráfico de dona autónomo por categoría, sin necesidad de un servicio de imágenes externo.</span>
         <span language="ru">Используйте -s / --svg для получения самодостаточной кольцевой диаграммы по каждой категории — внешний сервис изображений не нужен.</span>
+        <span language="de">Mit -s / --svg erhältst du ein eigenständiges Ringdiagramm pro Kategorie — kein externer Bilddienst nötig.</span>
       </template>
     </p>
     <div class="code-row">
@@ -398,6 +422,7 @@
         <span language="zh">徽章颜色</span>
         <span language="es">Colores de las insignias</span>
         <span language="ru">Цвета значков</span>
+        <span language="de">Badge-Farben</span>
       </template>
     </h2>
     <p>
@@ -407,6 +432,7 @@
         <span language="zh">徽章和 SVG 环形图使用相同的分数阈值来决定颜色。</span>
         <span language="es">Tanto las insignias como los gráficos de dona SVG usan los mismos umbrales para elegir el color de cada puntuación.</span>
         <span language="ru">И значки, и SVG-диаграммы используют одни и те же пороги для выбора цвета каждой оценки.</span>
+        <span language="de">Badges und SVG-Ringdiagramme verwenden dieselben Schwellenwerte, um die Farbe jedes Werts festzulegen.</span>
       </template>
     </p>
     <table class="colors">
@@ -418,6 +444,7 @@
             <span language="zh">分数</span>
             <span language="es">Puntuación</span>
             <span language="ru">Оценка</span>
+            <span language="de">Wert</span>
           </template>
         </th>
         <th>
@@ -427,6 +454,7 @@
             <span language="zh">颜色</span>
             <span language="es">Color</span>
             <span language="ru">Цвет</span>
+            <span language="de">Farbe</span>
           </template>
         </th>
       </tr></thead>
@@ -438,6 +466,7 @@
             <span language="zh">绿色</span>
             <span language="es">Verde</span>
             <span language="ru">Зелёный</span>
+            <span language="de">Grün</span>
           </template>
         </td></tr>
         <tr><td>50–89</td><td class="score-yellow">
@@ -447,6 +476,7 @@
             <span language="zh">黄色</span>
             <span language="es">Amarillo</span>
             <span language="ru">Жёлтый</span>
+            <span language="de">Gelb</span>
           </template>
         </td></tr>
         <tr><td>0–49</td><td class="score-red">
@@ -456,6 +486,7 @@
             <span language="zh">红色</span>
             <span language="es">Rojo</span>
             <span language="ru">Красный</span>
+            <span language="de">Rot</span>
           </template>
         </td></tr>
       </tbody>
@@ -470,6 +501,7 @@
         <span language="zh">快速开始</span>
         <span language="es">Inicio rápido</span>
         <span language="ru">Быстрый старт</span>
+        <span language="de">Schnellstart</span>
       </template>
     </h2>
     <p>
@@ -479,6 +511,7 @@
         <span language="zh">两种无需永久安装即可试用 lighthouse-badges 的方式。</span>
         <span language="es">Dos formas de probar lighthouse-badges sin una instalación permanente.</span>
         <span language="ru">Два способа попробовать lighthouse-badges без постоянной установки.</span>
+        <span language="de">Zwei Wege, lighthouse-badges ohne dauerhafte Installation auszuprobieren.</span>
       </template>
     </p>
 
@@ -489,6 +522,7 @@
         <span language="zh">使用 Docker 运行</span>
         <span language="es">Ejecutar con Docker</span>
         <span language="ru">Запуск через Docker</span>
+        <span language="de">Mit Docker ausführen</span>
       </template>
     </h3>
     <div class="code-row">
@@ -508,10 +542,51 @@ docker run lighthouse-badges https://example.com</code></pre>
         <span language="zh">直接运行</span>
         <span language="es">Ejecutar directamente</span>
         <span language="ru">Запуск напрямую</span>
+        <span language="de">Direkt ausführen</span>
       </template>
     </h3>
     <div class="code-row">
       <pre><code>npx github:hidao80/lighthouse-badges https://example.com</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section id="development">
+    <h2>
+      <template type="language-group">
+        <span language="en">Development</span>
+        <span language="ja">開発</span>
+        <span language="zh">开发</span>
+        <span language="es">Desarrollo</span>
+        <span language="ru">Разработка</span>
+        <span language="de">Entwicklung</span>
+      </template>
+    </h2>
+    <p>
+      <template type="language-group">
+        <span language="en">Tool versions are managed with mise (mise.toml). Trust the config and install the tools first.</span>
+        <span language="ja">ツールのバージョンは mise（mise.toml）で管理している。最初に設定を trust してツールをインストールする。</span>
+        <span language="zh">工具版本由 mise（mise.toml）管理。请先信任配置并安装工具。</span>
+        <span language="es">Las versiones de las herramientas se gestionan con mise (mise.toml). Primero confía en la configuración e instala las herramientas.</span>
+        <span language="ru">Версии инструментов управляются через mise (mise.toml). Сначала доверьте конфигурацию и установите инструменты.</span>
+        <span language="de">Die Tool-Versionen werden mit mise (mise.toml) verwaltet. Vertraue zuerst der Konfiguration und installiere die Tools.</span>
+      </template>
+    </p>
+    <div class="code-row">
+      <pre><code>mise trust
+mise install</code></pre>
+      <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
+        <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+    <div class="code-row">
+      <pre><code>bun install
+bun run build
+bun run lint</code></pre>
       <button class="copy-btn outline secondary" type="button" aria-label="Copy command">
         <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -527,6 +602,7 @@ docker run lighthouse-badges https://example.com</code></pre>
         <span language="zh">值得信赖的技术栈</span>
         <span language="es">Una pila tecnológica confiable</span>
         <span language="ru">Надёжный технологический стек</span>
+        <span language="de">Auf einem bewährten Stack gebaut</span>
       </template>
     </h2>
     <p>
@@ -536,6 +612,7 @@ docker run lighthouse-badges https://example.com</code></pre>
         <span language="zh">完全基于成熟可靠的开源技术构建。CI 中还通过 Takumi Guard 对依赖包进行恶意软件扫描。</span>
         <span language="es">Construido enteramente con tecnología de código abierto moderna y probada. El CI también escanea dependencias con Takumi Guard.</span>
         <span language="ru">Полностью построено на современных и проверенных open-source технологиях. CI также сканирует зависимости с помощью Takumi Guard.</span>
+        <span language="de">Vollständig mit modernen, bewährten Open-Source-Technologien gebaut. Die CI prüft Abhängigkeiten zudem mit Takumi Guard auf Malware.</span>
       </template>
     </p>
     <ul class="tech-list">
@@ -544,6 +621,7 @@ docker run lighthouse-badges https://example.com</code></pre>
       <li>Lighthouse</li>
       <li>chrome-launcher</li>
       <li>Bun</li>
+      <li>mise</li>
       <li>Biome</li>
       <li>Vitest</li>
       <li>Docker</li>
@@ -564,13 +642,14 @@ docker run lighthouse-badges https://example.com</code></pre>
         <span language="zh">MIT 许可证</span>
         <span language="es">Licencia MIT</span>
         <span language="ru">Лицензия MIT</span>
+        <span language="de">MIT-Lizenz</span>
       </template>
     </a> ·
     <a href="https://deepwiki.com/hidao80/lighthouse-badges">Ask DeepWiki</a>
   </p>
 </footer>
 
-<script src="main.min.js"></script>
+<script src="main.js"></script>
 
 </body>
 </html>
