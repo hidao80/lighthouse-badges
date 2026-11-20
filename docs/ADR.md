@@ -1,7 +1,7 @@
 # Architecture Decision Record (ADR) — lighthouse-badges
 
-This document analyzes the `git log` history (68 commits, 2026-01-18 to
-2026-09-27) and reconstructs the project's major design decisions in ADR
+This document analyzes the `git log` history (124 commits, 2026-01-18 to
+2026-11-21) and reconstructs the project's major design decisions in ADR
 format.
 
 ---
@@ -340,6 +340,12 @@ Replaced pnpm with Bun across the toolchain:
   audit feature matures.
 - Contributors need Bun installed locally instead of pnpm; README/CONTRIBUTING
   instructions referencing `pnpm` should be updated separately if present.
+
+**Update-001 (2026-11-21, `f3d00fd`, `ebd7f50`)**: Bun remains the package
+manager and runtime, but how it is installed changed: `oven-sh/setup-bun` was
+replaced by `jdx/mise-action` in `lint.yml`/`audit.yml`/`test.yml`, and the
+Bun version is now declared in `mise.toml` for both local and CI use. See
+[ADR-0023](#adr-0023).
 
 ---
 
@@ -680,6 +686,19 @@ commit SHA, keeping the version as a trailing comment for readability:
 - All four workflow files (`audit.yml`, `build.yml`, `lint.yml`, `test.yml`)
   now share the identical three-step setup sequence pinned to the same SHAs.
 
+**Update-001 (2026-10-03, `02b7c0d`)**: Dependabot bumped
+`flatt-security/setup-takumi-guard-npm` from `6d41827…` (v1.2.0) to
+`14f07d0…` (v1.4.0) in all four workflows, updating SHA and version comment
+together — the SHA-pin + Dependabot combination worked as intended for this
+bump.
+
+**Update-002 (2026-11-21, `ebd7f50`)**: `oven-sh/setup-bun` was removed from
+`lint.yml`/`audit.yml`/`test.yml` and replaced by
+`jdx/mise-action@90f833d396d0cc3674b631d2d225e306476c303a # v5.2.10`,
+following the same SHA-pin convention ([ADR-0023](#adr-0023)). The setup
+sequence is now `checkout` → `setup-takumi-guard-npm` → `mise-action`;
+`build.yml` (no Bun step) is unchanged.
+
 ---
 
 ## ADR-0021: Recommit `bin/`; drop the install-time `prepare`/`prepack` build (supersedes ADR-0014)
@@ -809,6 +828,130 @@ instructions today would silently install the wrong, unrelated package.
 
 ---
 
+## ADR-0023: Manage tool versions with mise, locally and in CI
+
+- **Status**: Accepted
+- **Date**: 2026-11-21
+- **Related commits**: `f3d00fd` add mise.toml configuration for tools,
+  `74720c8` update README to include mise tool usage instructions,
+  `ebd7f50` update workflows to use jdx/mise-action@v5.2.10
+
+### Context
+
+Bun ([ADR-0011](#adr-0011)) was installed separately in each environment:
+contributors installed it by hand, and `lint.yml`/`audit.yml`/`test.yml` used
+`oven-sh/setup-bun` with no version input. There was no single, checked-in
+declaration of which tools (and versions) the project needs, so local and CI
+setup were defined in different places.
+
+### Decision
+
+- Added `mise.toml` at the repository root declaring `[tools] bun = "latest"`.
+- Documented in `README.md` (Development section) that contributors run
+  `mise trust` and then `mise install` before `bun install`.
+- Replaced `oven-sh/setup-bun` with `jdx/mise-action` in `lint.yml`,
+  `audit.yml`, and `test.yml`, pinned by commit SHA per
+  [ADR-0020](#adr-0020) (`90f833d…`, v5.2.10). The action installs the tools
+  in `mise.toml` (its `install` input defaults to `true`) and sets
+  `MISE_TRUSTED_CONFIG_PATHS` to the workspace, so CI needs no explicit
+  `mise trust` step. Its default tool cache (`cache: true`) is left on; none
+  of these three workflows publish artifacts.
+- `build.yml` was not changed, since it builds the Docker image and has no
+  Bun setup step.
+
+### Consequences
+
+- Tool requirements live in one file (`mise.toml`) shared by contributors and
+  CI; adding a tool (e.g. Node.js) no longer requires editing each workflow.
+- `bun = "latest"` keeps the previous behavior (setup-bun without a version
+  also installed the latest Bun), so builds are still not reproducible to a
+  fixed Bun version; pinning would be a `mise.toml` change.
+- Contributors now need mise installed (or must install Bun by other means
+  and skip the mise steps).
+- Speculative: compatibility of `jdx/mise-action` with local `act` runs
+  ([ADR-0016](#adr-0016)) was not verified in these commits.
+- [ADR-0019](#adr-0019)'s description of the shared setup sequence
+  (`checkout` → `setup-takumi-guard-npm` → `setup-bun`) is now historical;
+  the third step is `mise-action`.
+
+---
+
+## ADR-0024: Force patched transitive dependencies through `package.json#overrides`
+
+- **Status**: Accepted
+- **Date**: 2026-10-11
+- **Related commits**: `d157439` source-map-js 1.2.1 → 1.2.2 (lockfile),
+  `a9886a6` add postcss-selector-parser override, `54bb694` update glob
+  version in overrides to >=14.0.2
+
+### Context
+
+[ADR-0011](#adr-0011) carried the `@opentelemetry/core` override over into a
+top-level `overrides` field when moving to Bun. Later, some transitive
+dependencies (brought in by `lighthouse` and the dev toolchain, not declared
+directly) needed newer versions than their parents resolved to. Speculative:
+the commit messages do not state the reason; the `>=`/`^` floors are
+consistent with forcing past versions affected by known advisories reported
+by `bun audit` ([ADR-0011](#adr-0011)).
+
+### Decision
+
+- Kept the "no new direct dependencies" rule (`AGENTS.md`) and instead raised
+  transitive versions in place via `package.json#overrides`:
+  `postcss-selector-parser: ^7.1.6` (`a9886a6`) and `glob: >=14.0.2`
+  (`54bb694`), next to the existing `@opentelemetry/core: >=2.8.0`.
+- For a patch-level bump that the existing ranges already allowed
+  (`source-map-js` 1.2.1 → 1.2.2), only `bun.lock` was updated (`d157439`),
+  with no override added.
+
+### Consequences
+
+- The direct dependency list stays at `chrome-launcher` + `lighthouse`, while
+  transitive versions can be raised without waiting for upstream releases.
+- Overrides are not removed automatically once upstream catches up; each one
+  should be re-checked when `lighthouse` or the dev tools are upgraded, and
+  dropped when no longer needed.
+- Open-ended floors such as `>=14.0.2` permit future major versions of the
+  overridden package, which could break a parent package that expects an
+  older major.
+
+---
+
+## ADR-0025: `AGENTS.md` as the single agent-guidance file; keep local Claude settings untracked
+
+- **Status**: Accepted
+- **Date**: 2026-10-04
+- **Related commits**: `24a72d4` untrack .claude/settings.local.json,
+  `f351509` consolidate agent guidance into AGENTS.md
+
+### Context
+
+`CLAUDE.md` contained only `@AGNETS.md` — an import with a typo — so
+`AGENTS.md` was never actually loaded through it. `AGENTS.md` also repeated
+repository layout, CI, and Docker details that could be read directly from
+the tree, `.github/workflows`, and the `Dockerfile`, and could drift from
+them. `.claude/settings.local.json` (per-machine permissions) was tracked in
+git.
+
+### Decision
+
+- Deleted `CLAUDE.md` and kept `AGENTS.md` as the only agent-guidance file.
+- Removed the Repository layout, CI, and Docker sections from `AGENTS.md`,
+  keeping only guidance that cannot be derived from the files themselves
+  (tech stack, build/run commands, conventions).
+- Removed `.claude/settings.local.json` from the index and added it to
+  `.gitignore`.
+
+### Consequences
+
+- There is one guidance file to maintain, and fewer statements in it that
+  can go stale relative to the workflows and Dockerfile.
+- Tools that read only `CLAUDE.md` no longer get repository guidance unless
+  they also read `AGENTS.md`.
+- Each contributor's local Claude permissions stay out of version control.
+
+---
+
 ## Commit timeline (reference)
 
 | Date | Commit | Summary |
@@ -863,3 +1006,17 @@ instructions today would silently install the wrong, unrelated package.
 | 2026-09-27 | `3ef97f9` | Updated `AGENTS.md` tech-stack/testing description (docs only) |
 | 2026-09-27 | `0602dd9` | Documented `bin/` recommit / dropped install-time build as ADR-0021 (docs/ADR.md only; the code change landed earlier in `5204d24`) |
 | 2026-09-27 | `cc4acfc` | Scoped npm package name to `@hidao/lighthouse-badges` ([ADR-0022](#adr-0022)) |
+| 2026-10-03 | `e2cfb63`, `3f99f51`, `bfb3b05` | README: Ask DeepWiki badge replaced, Test workflow badge added |
+| 2026-10-03 | `02b7c0d` | Dependabot: `setup-takumi-guard-npm` v1.2.0 → v1.4.0 in all workflows ([ADR-0020](#adr-0020)) |
+| 2026-10-04 | `24a72d4` | Untracked `.claude/settings.local.json` ([ADR-0025](#adr-0025)) |
+| 2026-10-04 | `f351509` | Removed `CLAUDE.md`, trimmed `AGENTS.md` ([ADR-0025](#adr-0025)) |
+| 2026-10-04 | `6aa4179`, `35dd5f6` | `.claude/skills/*` changes (Claude tooling, not product architecture) |
+| 2026-10-11 | `d157439` | `source-map-js` 1.2.1 → 1.2.2 in `bun.lock` ([ADR-0024](#adr-0024)) |
+| 2026-10-11 | `a9886a6` | Added `postcss-selector-parser` override ([ADR-0024](#adr-0024)) |
+| 2026-11-06 | `63c35d8` | Removed project-level skills (`make-lp`, `make-social-preview`, `setup-act`, `update-adr`) |
+| 2026-11-06 | `54bb694` | Added `glob >=14.0.2` override ([ADR-0024](#adr-0024)) |
+| 2026-11-06 | `f0fd06f`, `fd81caf` | README Lighthouse score badges; landing page tech-stack section |
+| 2026-10-03 – 2026-11-17 | `4f3a08a` … `f7457bf` | Releases 1.0.1–1.0.7 and routine Dependabot/dependency bumps (lighthouse 13.6.0, vitest, biome, `@types/node`, `upload-artifact` v7.0.2, etc.) |
+| 2026-11-21 | `f3d00fd` | Added `mise.toml` ([ADR-0023](#adr-0023)) |
+| 2026-11-21 | `74720c8` | README: `mise trust` / `mise install` setup steps ([ADR-0023](#adr-0023)) |
+| 2026-11-21 | `ebd7f50` | Workflows: `oven-sh/setup-bun` → `jdx/mise-action` v5.2.10 ([ADR-0023](#adr-0023)) |
