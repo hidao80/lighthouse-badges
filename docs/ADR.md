@@ -1,6 +1,6 @@
 # Architecture Decision Record (ADR) — lighthouse-badges
 
-This document analyzes the `git log` history (124 commits, 2026-01-18 to
+This document analyzes the `git log` history (127 commits, 2026-01-18 to
 2026-11-21) and reconstructs the project's major design decisions in ADR
 format.
 
@@ -605,6 +605,40 @@ Per the commit message and diff:
   generates the minified file.
 - Users lose the explicit theme override and follow the OS setting only.
 
+**Update-001 (2026-11-21, `5cdfa4f`)**: `docs/main.min.js` was deleted and
+`docs/index.html` now loads `docs/main.js` directly, removing the manual
+`main.js`/`main.min.js` sync burden noted above (the unminified file is ~2.7 KB,
+so the size saving was negligible). German (`de`) was added as a sixth
+language, both to every `language-group` template and to `main.js`'s `LANGS`
+list and title/description dictionary. In the same commit the page gained a
+Development section (`mise trust` / `mise install`, then `bun install` /
+`bun run build` / `bun run lint`, per [ADR-0023](#adr-0023)), `mise` in the
+tech-stack list, a Twemoji SVG favicon (jsDelivr) in place of the inline
+emoji data URI, and the JSON-LD `softwareVersion` bumped from `1.0.0` to
+`1.0.7`. The favicon is a further jsDelivr asset (jsDelivr already served
+Pico CSS at this point) loaded without Subresource Integrity, with the same
+speculative risk as above.
+
+**Update-002 (2026-11-21, `6c83e71`)**: Pico CSS
+(`cdn.jsdelivr.net/npm/@picocss/pico@2`, an unpinned major-version range) was
+removed from `docs/index.html`. Its role is taken over by a base layer at the
+top of `docs/style.css`: CSS custom properties (`--bg`, `--text`, `--accent`,
+`--border`, `--code-bg`, …) with a `prefers-color-scheme: dark` override, and
+self-written rules for the Pico classes/attributes the page already used
+(`.container`, `.grid`, `[role="button"]`, `.secondary`, `.outline.secondary`,
+tables, `pre`/`code`, `select`), so the HTML markup did not change. The
+existing page rules now reference these properties instead of `--pico-*`.
+The same commit added Subresource Integrity to the remaining third-party
+script, `multilanguagejs@2.0.1` on unpkg (`integrity="sha384-gChgPd…"`,
+`crossorigin="anonymous"`), addressing the unpkg risk noted under
+Consequences. Alternatives discussed but not adopted: a
+`<meta http-equiv="Content-Security-Policy">` policy and self-hosting
+multilanguagejs (SRI was judged sufficient). Remaining trade-offs: the page
+no longer depends on any third-party stylesheet, but a multilanguagejs upgrade
+now requires recomputing the hash or the script is blocked (and language
+switching stops working); the Twemoji favicon on jsDelivr stays without SRI,
+because `integrity` has no effect on `<link rel="icon">`.
+
 ---
 
 ## ADR-0019: Add a vitest unit/integration test suite and wire it into CI
@@ -1020,3 +1054,6 @@ git.
 | 2026-11-21 | `f3d00fd` | Added `mise.toml` ([ADR-0023](#adr-0023)) |
 | 2026-11-21 | `74720c8` | README: `mise trust` / `mise install` setup steps ([ADR-0023](#adr-0023)) |
 | 2026-11-21 | `ebd7f50` | Workflows: `oven-sh/setup-bun` → `jdx/mise-action` v5.2.10 ([ADR-0023](#adr-0023)) |
+| 2026-11-21 | `a9a3372` | Added ADR-0023–0025 and updates to ADR-0011/0020 (docs/ADR.md only) |
+| 2026-11-21 | `5cdfa4f` | Landing page: German, Development section, `main.min.js` removed ([ADR-0018](#adr-0018)) |
+| 2026-11-21 | `6c83e71` | Landing page: Pico CSS replaced by custom styles, SRI on multilanguagejs ([ADR-0018](#adr-0018)) |
